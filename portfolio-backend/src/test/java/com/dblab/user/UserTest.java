@@ -1,7 +1,9 @@
 package com.dblab.user;
 
 import com.dblab.domain.User;
+import com.dblab.dto.UserDTO;
 import com.dblab.repository.UserRepository;
+import com.dblab.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,20 +44,20 @@ public class UserTest {
 
     @Test
     public void saveUserTest() throws Exception {
-        User user = new User();
-        user.setUsername("testUserName");
-        user.setPassword(passwordEncoder.encode("testUserPassword"));
-        user.setEmail("testUserEmail@gmail.com");
-        user.setRegisteredDate(LocalDateTime.now());
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("testId");
+        userDTO.setPassword("testPassword");
+        userDTO.setEmail("test@gmail.com");
+
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(user)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         //등록 확인
-        user = userRepository.findByUsername(user.getUsername());
+        User user = userRepository.findByIdx(1L);
         assertThat(user).isNotNull();
-        assertThat(user.getUsername()).isEqualTo("testUserName");
-        assertThat(user.getEmail()).isEqualTo("testUserEmail@gmail.com");
+        assertThat(user.getUsername()).isEqualTo("testId");
+        assertThat(user.getEmail()).isEqualTo("test@gmail.com");
     }
 }

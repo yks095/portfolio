@@ -1,6 +1,7 @@
 package com.dblab.login;
 
 import com.dblab.domain.User;
+import com.dblab.dto.UserDTO;
 import com.dblab.repository.UserRepository;
 import com.dblab.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,22 +36,18 @@ public class LoginTest {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private UserService userService;
+
     @Before
     public void setUp(){
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-        User user = new User();
-        user.setUsername("testUserName");
-        user.setPassword("testUserPassword");
-        user.setEmail("test@gmail.com");
-        user.setRegisteredDate(LocalDateTime.now());
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("testUserName");
+        userDTO.setPassword("testUserPassword");
+        userDTO.setEmail("test@gmail.com");
 
-        userService.passwordEncodeAndSave(user);
+        userService.passwordEncodeAndSave(userDTO);
     }
 
     @Test

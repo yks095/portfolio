@@ -1,6 +1,7 @@
 package com.dblab.controller;
 
 import com.dblab.domain.User;
+import com.dblab.dto.UserDTO;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveUser(@RequestBody User user){
-        userService.passwordEncodeAndSave(user);
+    public ResponseEntity<?> saveUser(@RequestBody UserDTO userDTO){
+        userService.passwordEncodeAndSave(userDTO);
 
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }

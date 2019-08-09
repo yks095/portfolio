@@ -19,10 +19,10 @@ public class IntroductionService {
     }
 
     public void modifyIntroduction(Long idx, Introduction introduction) {
-        Introduction modiIntroduction = introductionRepository.findByIdx(idx);
-        modiIntroduction.modiIntroduction(introduction);
+        Introduction modifiedIntroduction = introductionRepository.findByIdx(idx);
+        modifiedIntroduction.modifyIntroduction(introduction);
 
-        introductionRepository.save(modiIntroduction);
+        introductionRepository.save(modifiedIntroduction);
     }
 
     public void deleteIntroduction(Long idx) {

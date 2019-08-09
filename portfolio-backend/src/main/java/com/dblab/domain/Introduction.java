@@ -57,7 +57,7 @@ public class Introduction implements Serializable {
         this.registeredDate = registeredDate;
     }
 
-    public void modiIntroduction(Introduction introduction) {
+    public void modifyIntroduction(Introduction introduction) {
         this.title = introduction.getTitle();
         this.growth = introduction.getGrowth();
         this.reason = introduction.getReason();

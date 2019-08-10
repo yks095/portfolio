@@ -20,20 +20,20 @@ public class IntroductionController {
         return "/introduction";
     }
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<?> saveIntroduction(@RequestBody Introduction introduction){
         introductionService.saveIntroduction(introduction);
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
 
-    @PutMapping("/modify/{idx}")
+    @PutMapping("/{idx}")
     public ResponseEntity<?> modifyIntroduction(@PathVariable("idx") Long idx, @RequestBody Introduction introduction){
         introductionService.modifyIntroduction(idx, introduction);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{idx}")
+    @DeleteMapping("/{idx}")
     public ResponseEntity<?> deleteIntroduction(@PathVariable("idx") Long idx){
         introductionService.deleteIntroduction(idx);
 

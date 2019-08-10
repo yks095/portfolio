@@ -46,7 +46,7 @@ public class IntroductionTest {
         introduction.setGrowth("Test Growth");
         String jsonRequest = objectMapper.writeValueAsString(introduction);
 
-        mockMvc.perform(post("/introduction/save").content(jsonRequest).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/introduction").content(jsonRequest).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         //저장 확인 전
@@ -68,7 +68,7 @@ public class IntroductionTest {
         introduction.setTitle("Test Title");
         introduction.setGrowth("Test Growth");
 
-        mockMvc.perform(post("/introduction/save").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         //수정 확인 전
@@ -81,7 +81,7 @@ public class IntroductionTest {
         introduction.setTitle("Modify Test");
         introduction.setGrowth("Modify Growth");
 
-        mockMvc.perform(put(("/introduction/modify/1")).content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(put(("/introduction/1")).content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 
         //수정 확인
@@ -98,7 +98,7 @@ public class IntroductionTest {
         introduction.setTitle("Test Title");
         introduction.setGrowth("Test Growth");
 
-        mockMvc.perform(post("/introduction/save").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         //삭제 확인 전
@@ -108,7 +108,7 @@ public class IntroductionTest {
         assertThat(introduction.getGrowth()).isEqualTo("Test Growth");
 
         //삭제
-        mockMvc.perform(delete("/introduction/delete/1")).andExpect(status().isOk());
+        mockMvc.perform(delete("/introduction/1")).andExpect(status().isOk());
 
         //삭제 확인
         introduction = introductionRepository.findByIdx(1L);

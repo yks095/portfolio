@@ -47,7 +47,7 @@ public class UserTest {
         userDTO.setEmail("test@gmail.com");
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         //데이터베이스 확인
@@ -60,7 +60,7 @@ public class UserTest {
         userDTO.setUsername("id");
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터베이스 확인
@@ -71,7 +71,7 @@ public class UserTest {
         userDTO.setUsername("testUserName12");
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터 베이스 확인
@@ -83,7 +83,7 @@ public class UserTest {
         userDTO.setPassword("passw");
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터 베이스 확인
@@ -94,7 +94,7 @@ public class UserTest {
         userDTO.setPassword("testUserPassword12");
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터 베이스 확인
@@ -106,7 +106,7 @@ public class UserTest {
         userDTO.setEmail("test");
 
         //유저 등록
-        mockMvc.perform(post("/user/save").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터 베이스 확인

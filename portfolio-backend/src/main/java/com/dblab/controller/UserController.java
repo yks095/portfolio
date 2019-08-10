@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors()) return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
         else {

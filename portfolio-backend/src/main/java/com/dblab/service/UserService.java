@@ -1,6 +1,6 @@
 package com.dblab.service;
 
-import com.dblab.dto.UserDTO;
+import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +15,7 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public void passwordEncodeAndSave(UserDTO userDTO) {
+    public void passwordEncodeAndSave(UserDto userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(userDTO.setUser());
     }

@@ -1,7 +1,6 @@
 package com.dblab.introduction;
 
 import com.dblab.domain.Introduction;
-import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.IntroductionRepository;
 import com.dblab.repository.UserRepository;
@@ -14,8 +13,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -36,18 +33,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class IntroductionTest {
 
     private MockMvc mockMvc;
+
     @Autowired
     private WebApplicationContext context;
+
     @Autowired
     ObjectMapper objectMapper;
+
     @Autowired
     IntroductionRepository introductionRepository;
+
     @Autowired
     UserService userService;
+
     @Autowired
     CustomUserDetailsService customUserDetailsService;
+
     @Autowired
     UserRepository userRepository;
+
     private UserDetails userDetails;
 
     @Before
@@ -73,6 +77,11 @@ public class IntroductionTest {
 
         //userDetailis 확인
         assertThat(userDetails.getUsername()).isEqualTo("testUserName");
+
+        //현재 유저 매핑
+        mockMvc.perform(get("/introduction").with(csrf()).with(user(userDetails)))
+                .andExpect(authenticated()).andExpect(status().isOk());
+
     }
 
     @Test
@@ -96,13 +105,19 @@ public class IntroductionTest {
         assertThat(introduction.getTitle()).isEqualTo("Test Title");
         assertThat(introduction.getGrowth()).isEqualTo("Test Growth");
         assertThat(introduction.getReason()).isNull();
+
+        //유저 매핑확인
+        assertThat(introduction.getUser()).isNotNull();
+        assertThat(introduction.getUser().getUsername()).isEqualTo("testUserName");
+        assertThat(introduction.getUser().getEmail()).isEqualTo("test@gmail.com");
+
     }
 
     @Test
     public void modifyIntroductionTest() throws Exception {
-        Introduction introduction = new Introduction();
-        introduction.setTitle("Test Title");
-        introduction.setGrowth("Test Growth");
+            Introduction introduction = new Introduction();
+            introduction.setTitle("Test Title");
+            introduction.setGrowth("Test Growth");
 
         mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE)
                 .with(csrf()).with(user(userDetails))).andExpect(status().isCreated());
@@ -150,6 +165,5 @@ public class IntroductionTest {
         //삭제 확인
         introduction = introductionRepository.findByIdx(1L);
         assertThat(introduction).isNull();
-
     }
 }

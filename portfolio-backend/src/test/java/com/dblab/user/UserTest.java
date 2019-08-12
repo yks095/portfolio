@@ -29,8 +29,7 @@ public class UserTest {
     private WebApplicationContext context;
     @Autowired
     private ObjectMapper mapper;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -112,5 +111,10 @@ public class UserTest {
         //데이터 베이스 확인
         user = userRepository.findByIdx(2L);
         assertThat(user).isNull();
+    }
+
+    @Test
+    public void 유저매핑테스트(){
+
     }
 }

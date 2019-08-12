@@ -1,5 +1,6 @@
 package com.dblab.service;
 
+import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +21,7 @@ public class UserService {
         userRepository.save(userDTO.setUser());
     }
 
+    public User currentUser(org.springframework.security.core.userdetails.User user) {
+        return userRepository.findByUsername(user.getUsername());
+    }
 }

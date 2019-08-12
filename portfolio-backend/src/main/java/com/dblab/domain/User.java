@@ -6,7 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table
@@ -31,11 +33,15 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime registeredDate;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Introduction> introductions;
+
     @Builder
-    public User(String username, String password, String email, LocalDateTime registeredDate) {
+    public User(String username, String password, String email, LocalDateTime registeredDate, Set<Introduction> introductions) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.registeredDate = registeredDate;
+        this.introductions = introductions;
     }
 }

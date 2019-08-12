@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @NoArgsConstructor
 @Entity
@@ -46,8 +47,12 @@ public class Introduction implements Serializable {
     @Column
     private LocalDateTime registeredDate;
 
+    @ManyToOne
+    private User user;
+
     @Builder
-    public Introduction(String title, String growth, String reason, String strength, String weakness, String aspiration, LocalDateTime registeredDate) {
+    public Introduction(String title, String growth, String reason, String strength, String weakness, String aspiration, LocalDateTime registeredDate,
+                        User user) {
         this.title = title;
         this.growth = growth;
         this.reason = reason;
@@ -55,6 +60,7 @@ public class Introduction implements Serializable {
         this.weakness = weakness;
         this.aspiration = aspiration;
         this.registeredDate = registeredDate;
+        this.user = user;
     }
 
     public void modifyIntroduction(Introduction introduction) {
@@ -64,5 +70,13 @@ public class Introduction implements Serializable {
         this.strength = introduction.getStrength();
         this.weakness = introduction.getWeakness();
         this.aspiration = introduction.getAspiration();
+    }
+
+
+    public void setUsers(User currentUser) {
+        if(this.user != null) this.user.getIntroductions().remove(this);
+
+        this.user = currentUser;
+        currentUser.getIntroductions().add(this);
     }
 }

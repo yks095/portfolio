@@ -65,12 +65,15 @@ public class IntroductionTest {
         userDto.setEmail("test@gmail.com");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(objectMapper.writeValueAsString(userDto)).contentType(MediaType.APPLICATION_JSON_VALUE).with(csrf()))
+        mockMvc.perform(post("/user").content(objectMapper.writeValueAsString(userDto))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .with(csrf()))
                 .andExpect(status().isCreated());
 
         //로그인
         mockMvc.perform(formLogin().user("testUserName").password("testUserPassword"))
-                .andExpect(forwardedUrl("/login/success")).andExpect(authenticated());
+                .andExpect(forwardedUrl("/login/success"))
+                .andExpect(authenticated());
 
         //set userDetailis
         userDetails = customUserDetailsService.loadUserByUsername("testUserName");
@@ -80,7 +83,8 @@ public class IntroductionTest {
 
         //현재 유저 매핑
         mockMvc.perform(get("/introduction").with(csrf()).with(user(userDetails)))
-                .andExpect(authenticated()).andExpect(status().isOk());
+                .andExpect(authenticated())
+                .andExpect(status().isOk());
 
     }
 
@@ -90,9 +94,11 @@ public class IntroductionTest {
         introduction.setTitle("Test Title");
         introduction.setGrowth("Test Growth");
 
-        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE)
+        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .with(csrf()).with(user(userDetails)))
                 .andExpect(status().isCreated());
+
 
         //저장 확인 전
         assertThat(introduction).isNotNull();
@@ -119,8 +125,10 @@ public class IntroductionTest {
             introduction.setTitle("Test Title");
             introduction.setGrowth("Test Growth");
 
-        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE)
-                .with(csrf()).with(user(userDetails))).andExpect(status().isCreated());
+        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .with(csrf()).with(user(userDetails)))
+                .andExpect(status().isCreated());
 
         //수정 확인 전
         introduction = introductionRepository.findByIdx(1L);
@@ -132,7 +140,8 @@ public class IntroductionTest {
         introduction.setTitle("Modify Test");
         introduction.setGrowth("Modify Growth");
 
-        mockMvc.perform(put(("/introduction/1")).content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE)
+        mockMvc.perform(put(("/introduction/1")).content(objectMapper.writeValueAsString(introduction))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .with(csrf()).with(user(userDetails)))
                 .andExpect(status().isOk());
 
@@ -150,8 +159,10 @@ public class IntroductionTest {
         introduction.setTitle("Test Title");
         introduction.setGrowth("Test Growth");
 
-        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction)).contentType(MediaType.APPLICATION_JSON_VALUE)
-                .with(csrf()).with(user(userDetails))).andExpect(status().isCreated());
+        mockMvc.perform(post("/introduction").content(objectMapper.writeValueAsString(introduction))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .with(csrf()).with(user(userDetails)))
+                .andExpect(status().isCreated());
 
         //삭제 확인 전
         introduction = introductionRepository.findByIdx(1L);
@@ -160,7 +171,8 @@ public class IntroductionTest {
         assertThat(introduction.getGrowth()).isEqualTo("Test Growth");
 
         //삭제
-        mockMvc.perform(delete("/introduction/1").with(csrf()).with(user(userDetails))).andExpect(status().isOk());
+        mockMvc.perform(delete("/introduction/1").with(csrf()).with(user(userDetails)))
+                .andExpect(status().isOk());
 
         //삭제 확인
         introduction = introductionRepository.findByIdx(1L);

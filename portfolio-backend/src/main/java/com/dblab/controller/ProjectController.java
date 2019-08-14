@@ -20,20 +20,20 @@ public class ProjectController {
         return "/project";
     }
 
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<?> saveProject(@RequestBody Project project){
         projectService.saveProject(project);
         return new ResponseEntity<>("{}", HttpStatus.CREATED);
     }
 
-    @PutMapping("/modify/{idx}")
+    @PutMapping("/{idx}")
     public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @RequestBody Project project){
         projectService.modifyProject(idx, project);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{idx}")
+    @DeleteMapping("/{idx}")
     public ResponseEntity<?> deleteProject(@PathVariable("idx") Long idx){
         projectService.deleteProject(idx);
 

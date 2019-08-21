@@ -1,5 +1,6 @@
 package com.dblab.domain;
 
+import com.dblab.dto.IntroductionDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,15 +64,14 @@ public class Introduction implements Serializable {
         this.user = user;
     }
 
-    public void modifyIntroduction(Introduction introduction) {
-        this.title = introduction.getTitle();
-        this.growth = introduction.getGrowth();
-        this.reason = introduction.getReason();
-        this.strength = introduction.getStrength();
-        this.weakness = introduction.getWeakness();
-        this.aspiration = introduction.getAspiration();
+    public void modifyIntroduction(IntroductionDto introductionDto) {
+        this.title = introductionDto.getTitle();
+        this.growth = introductionDto.getGrowth();
+        this.reason = introductionDto.getReason();
+        this.strength = introductionDto.getStrength();
+        this.weakness = introductionDto.getWeakness();
+        this.aspiration = introductionDto.getAspiration();
     }
-
 
     public void setUsers(User currentUser) {
         if(this.user != null) this.user.getIntroductions().remove(this);

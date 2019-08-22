@@ -36,23 +36,15 @@ public class IntroductionRestController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getIntroductions(@PageableDefault Pageable pageable){
+
+        //현재 유저와 매핑
         org.springframework.security.core.userdetails.User user
                 = (org.springframework.security.core.userdetails.User)
                     SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         currentUser = userService.currentUser(user);
 
-        Page<Introduction> introductions = introductionService.findIntroductions(currentUser, pageable);
-        PageMetadata pageMetadata = new PageMetadata(pageable.getPageSize(),
-                                            introductions.getNumber(), introductions.getTotalElements());
-
-        PagedResources<Introduction> resources = new PagedResources<>(
-                                                    introductions.getContent(), pageMetadata);
-
-        //수정 필요
-        resources.add(new Link("localhost8080:/api/introductions").withSelfRel());
-
-        return ResponseEntity.ok(resources);
+        return ResponseEntity.ok(introductionService.pagedIntroduction(currentUser, pageable));
     }
 
     @PostMapping

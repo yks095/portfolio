@@ -27,8 +27,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -102,9 +102,10 @@ public class IntroductionRestTest {
         assertThat(user.getIntroductions().size()).isEqualTo(30);
 
         mockMvc.perform(get("/api/introductions")
-                        .with(csrf())
-                        .with(user(userDetails)))
-                        .andExpect(status().isOk());
+                .with(csrf())
+                .with(user(userDetails)))
+                .andDo(print())
+                .andExpect(status().isOk());
 
         //다른 유저 생성
         UserDto userDto = new UserDto();
@@ -114,10 +115,10 @@ public class IntroductionRestTest {
 
         //유저 등록
         mockMvc.perform(post("/user")
-                        .content(objectMapper.writeValueAsString(userDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .with(csrf()))
-                        .andExpect(status().isCreated());
+                .content(objectMapper.writeValueAsString(userDto))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .with(csrf()))
+                .andExpect(status().isCreated());
 
         //데이터베이스 확인
         User user2 = userRepository.findByIdx(2L);
@@ -138,9 +139,9 @@ public class IntroductionRestTest {
         userDetails = customUserDetailsService.loadUserByUsername("testId2");
 
         mockMvc.perform(get("/api/introductions")
-                        .with(csrf())
-                        .with(user(userDetails)))
-                        .andExpect(status().isOk());
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
 
     }
 
@@ -148,9 +149,9 @@ public class IntroductionRestTest {
     public void 자기소개서_등록_테스트() throws Exception {
 
         mockMvc.perform(get("/api/introductions")
-                        .with(csrf())
-                        .with(user(userDetails)))
-                        .andExpect(status().isOk());
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
 
         //자기소개서 생성
         IntroductionDto introductionDto = new IntroductionDto();
@@ -199,11 +200,11 @@ public class IntroductionRestTest {
 
         //자기소개서 등록
         mockMvc.perform(put("/api/introductions/1")
-                        .content(objectMapper.writeValueAsString(introductionDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .with(csrf())
-                        .with(user(userDetails)))
-                        .andExpect(status().isOk());
+                .content(objectMapper.writeValueAsString(introductionDto))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
 
         //데이터베이스 확인
         introduction = introductionRepository.findByIdx(1L);
@@ -236,9 +237,9 @@ public class IntroductionRestTest {
 
         //자기소개서 삭제
         mockMvc.perform(delete("/api/introductions/1")
-                        .with(csrf())
-                        .with(user(userDetails)))
-                        .andExpect(status().isOk());
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
 
         //데이터베이스 확인
         introduction = introductionRepository.findByIdx(1L);

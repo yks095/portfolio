@@ -1,9 +1,14 @@
 package com.dblab.project;
 
 import com.dblab.domain.Project;
+import com.dblab.domain.User;
+import com.dblab.dto.ProjectDto;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.ProjectRepository;
+import com.dblab.repository.UserRepository;
 import com.dblab.service.CustomUserDetailsService;
+import com.dblab.service.ProjectService;
+import com.dblab.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,12 +29,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProjectTest {
+public class ProjectRestTest {
 
     @Autowired
     WebApplicationContext webApplicationContext;
@@ -40,6 +46,12 @@ public class ProjectTest {
     private ProjectRepository projectRepository;
 
     private MockMvc mockMvc;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ProjectService projectService;
 
     @Autowired
     CustomUserDetailsService userDetailsService;
@@ -82,23 +94,47 @@ public class ProjectTest {
     }
 
     @Test
+    public void getMappingTest() throws Exception   {
+
+        User user = userRepository.findByIdx(1L);
+
+        for(int i = 0; i < 10; i++) {
+            ProjectDto projectDto = new ProjectDto();
+            projectDto.setName("name" + i);
+            projectDto.setPeriod("period" + i);
+            projectDto.setPersons("persons" + i);
+            projectDto.setDescription("description" + i);
+            projectService.saveProject(projectDto, user);
+        }
+
+        assertThat(user.getProjects().size()).isEqualTo(10);
+
+        mockMvc.perform(get("/api/project")
+                .with(csrf())
+                .with(user(userDetails)))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
     public void saveProjectTest() throws Exception  {
-        Project project = new Project();
-        project.setName("name_test");
-        project.setPeriod("period_test");
-        project.setPersons("persons_test");
-        project.setDescription("description_test");
+        ProjectDto projectDto = new ProjectDto();
+        projectDto.setName("name_test");
+        projectDto.setPeriod("period_test");
+        projectDto.setPersons("persons_test");
+        projectDto.setDescription("description_test");
 
         // post
-        mockMvc.perform(post("/project")
+        mockMvc.perform(post("/api/project")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(project))
+                .content(objectMapper.writeValueAsString(projectDto))
                 .with(csrf())
                 .with(user(userDetails)))
                 .andExpect(status().isCreated());
 
         // 이름, 기간, 인원, 내용, 등록날짜 확인
-        project = projectRepository.findByIdx(1L);
+        Project project = projectRepository.findByIdx(1L);
         assertThat(project).isNotNull();
         assertThat(project.getName()).isEqualTo("name_test");
         assertThat(project.getPeriod()).isEqualTo("period_test");
@@ -110,22 +146,22 @@ public class ProjectTest {
 
     @Test
     public void modifyProjectTest() throws Exception  {
-        Project modifiedProject = new Project();
-        modifiedProject.setName("name_test");
-        modifiedProject.setPeriod("period_test");
-        modifiedProject.setPersons("persons_test");
-        modifiedProject.setDescription("description_test");
+        ProjectDto modifiedProjectDto = new ProjectDto();
+        modifiedProjectDto.setName("name_test");
+        modifiedProjectDto.setPeriod("period_test");
+        modifiedProjectDto.setPersons("persons_test");
+        modifiedProjectDto.setDescription("description_test");
 
         // post
-        mockMvc.perform(post("/project")
+        mockMvc.perform(post("/api/project")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(modifiedProject))
+                .content(objectMapper.writeValueAsString(modifiedProjectDto))
                 .with(csrf())
                 .with(user(userDetails)))
                 .andExpect(status().isCreated());
 
         // 이름, 기간, 인원, 내용 확인
-        modifiedProject = projectRepository.findByIdx(1L);
+        Project modifiedProject = projectRepository.findByIdx(1L);
         assertThat(modifiedProject).isNotNull();
         assertThat(modifiedProject.getName()).isEqualTo("name_test");
         assertThat(modifiedProject.getPeriod()).isEqualTo("period_test");
@@ -133,15 +169,15 @@ public class ProjectTest {
         assertThat(modifiedProject.getDescription()).isEqualTo("description_test");
 
         // 이름, 기간, 인원, 내용, 수정
-        modifiedProject.setName("modified_name_test");
-        modifiedProject.setPeriod("modified_period_test");
-        modifiedProject.setPersons("modified_persons_test");
-        modifiedProject.setDescription("modified_description_test");
+        modifiedProjectDto.setName("modified_name_test");
+        modifiedProjectDto.setPeriod("modified_period_test");
+        modifiedProjectDto.setPersons("modified_persons_test");
+        modifiedProjectDto.setDescription("modified_description_test");
 
         // put
-        mockMvc.perform(put("/project/1")
+        mockMvc.perform(put("/api/project/1")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(modifiedProject))
+                .content(objectMapper.writeValueAsString(modifiedProjectDto))
                 .with(csrf())
                 .with(user(userDetails)))
                 .andExpect(status().isOk());
@@ -157,22 +193,22 @@ public class ProjectTest {
 
     @Test
     public void deleteProjectTest() throws Exception  {
-        Project deletedProject = new Project();
-        deletedProject.setName("name_test");
-        deletedProject.setPeriod("period_test");
-        deletedProject.setPersons("persons_test");
-        deletedProject.setDescription("description_test");
+        ProjectDto deletedProjectDto = new ProjectDto();
+        deletedProjectDto.setName("name_test");
+        deletedProjectDto.setPeriod("period_test");
+        deletedProjectDto.setPersons("persons_test");
+        deletedProjectDto.setDescription("description_test");
 
         // post
-        mockMvc.perform(post("/project")
+        mockMvc.perform(post("/api/project")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(deletedProject))
+                .content(objectMapper.writeValueAsString(deletedProjectDto))
                 .with(csrf())
                 .with(user(userDetails)))
                 .andExpect(status().isCreated());
 
         // 이름, 기간, 인원, 내용, 등록날짜 확인
-        deletedProject = projectRepository.findByIdx(1L);
+        Project deletedProject = projectRepository.findByIdx(1L);
         assertThat(deletedProject).isNotNull();
         assertThat(deletedProject.getName()).isEqualTo("name_test");
         assertThat(deletedProject.getPeriod()).isEqualTo("period_test");
@@ -180,7 +216,7 @@ public class ProjectTest {
         assertThat(deletedProject.getDescription()).isEqualTo("description_test");
 
         // delete
-        mockMvc.perform(delete("/project/1")
+        mockMvc.perform(delete("/api/project/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(deletedProject))
                 .with(csrf())

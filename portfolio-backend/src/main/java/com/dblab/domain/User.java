@@ -40,6 +40,9 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Introduction> introductions;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Project> projects;
+
     @Builder
     public User(String username, String password, String email, LocalDateTime registeredDate, Set<Introduction> introductions) {
         this.username = username;

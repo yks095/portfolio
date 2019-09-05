@@ -8,6 +8,7 @@ import com.dblab.repository.IntroductionRepository;
 import com.dblab.repository.UserRepository;
 import com.dblab.service.CustomUserDetailsService;
 import com.dblab.service.IntroductionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +22,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.stream.IntStream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -140,6 +144,7 @@ public class IntroductionRestTest {
         mockMvc.perform(get("/api/introductions")
                         .with(csrf())
                         .with(user(userDetails)))
+                        .andDo(print())
                         .andExpect(status().isOk());
 
     }
@@ -243,5 +248,37 @@ public class IntroductionRestTest {
         //데이터베이스 확인
         introduction = introductionRepository.findByIdx(1L);
         assertThat(introduction).isNull();
+    }
+
+    @Test
+    public void 자기소개서_세부사항_테스트() throws Exception {
+        User currentUser = userRepository.findByIdx(1L);
+
+        //자기소개서 등록
+
+        IntStream.rangeClosed(1, 30).forEach(
+                index -> introductionService.saveIntroduction(
+                        IntroductionDto.builder()
+                                .title("제목" + index)
+                                .growth("성장 과정" + index)
+                                .aspiration("입사 후 포부").build(), currentUser)
+
+        );
+
+        //자기소개서 등록 확인
+        Introduction introduction = introductionRepository.findByIdx(1L);
+
+        assertThat(introduction).isNotNull();
+        assertThat(introduction.getTitle()).isEqualTo("제목1");
+        assertThat(introduction.getGrowth()).isEqualTo("성장 과정1");
+
+        //매핑 후 반환 값 확인
+        mockMvc.perform(get("/api/introductions/1").with(csrf()).with(user(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        mockMvc.perform(get("/api/introductions/2").with(csrf()).with(user(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }

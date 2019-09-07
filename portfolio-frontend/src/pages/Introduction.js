@@ -8,13 +8,7 @@ class Introduction extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            introduction: {
-                growth: null,
-                reason: null,
-                strength: null,
-                weakness: null,
-                aspiration: null
-            }
+            introduction: ""
         }
     }
 
@@ -24,30 +18,29 @@ class Introduction extends React.Component {
 
     fetchIntroductionInfo = async () => {
         const introduction = await service.getIntroduction();
-        console.log(introduction);
-        const {growth, reason, strength, weakness, aspiration} = introduction.data;
         this.setState({
-            introduction: {
-                growth,
-                reason,
-                strength,
-                weakness,
-                aspiration
-            },
+            'introductions': introduction.data._embedded.introductionList
         });
     }
 
     render() {
-        const {introduction} = this.state;
         return (
             <div>
-                <IntroductionPanel
-                    growth={introduction.growth}
-                    reason={introduction.reason}
-                    strength={introduction.strength}
-                    weakness={introduction.weakness}
-                    aspiration={introduction.aspiration}
-                />
+                {
+                    this.state.introductions ?
+                    this.state.introductions.map(c => {
+                        return (<IntroductionPanel
+                            key={c.idx}
+                            title={c.title}
+                            growth={c.growth}
+                            reason={c.reason}
+                            strength={c.strength}
+                            weakness={c.weakness}
+                            aspiration={c.aspiration}
+                        />
+                        )
+                    }) : ""
+                }
             </div >
         );
     }

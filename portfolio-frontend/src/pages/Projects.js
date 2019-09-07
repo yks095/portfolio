@@ -7,7 +7,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Project from '../components/Project';
 
 const project = [{
-    'no': 1,
+    'idx': 1,
     'projectName': 'Smart Pot',
     'description' : '스마트 화분',
     'persons' : '박동현',
@@ -15,7 +15,7 @@ const project = [{
     'registerDate' : '2019-08-24'
 },
 {
-    'no': 2,
+    'idx': 2,
     'projectName': 'Portfolio',
     'description' : '포트폴리오',
     'persons' : '박동현',
@@ -37,7 +37,7 @@ class Projects extends React.Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                            {project.map(c => {return <Project key={c.no} no={c.no} projectName={c.projectName} description={c.description} persons={c.persons} period={c.period} registerDate={c.registerDate} />})}
+                            {project.map(c => {return <Project no={c.idx} key={c.idx} projectName={c.projectName} description={c.description} persons={c.persons} period={c.period} registerDate={c.registerDate} />})}
                     </TableBody>
                 </Table>
             </div>

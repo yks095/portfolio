@@ -12,6 +12,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -41,7 +42,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<Introduction> introductions;
+    private Set<Introduction> introductions = new HashSet<>();
+
 
     @Builder
     public User(String username, String password, String email, LocalDateTime registeredDate, Set<Introduction> introductions) {

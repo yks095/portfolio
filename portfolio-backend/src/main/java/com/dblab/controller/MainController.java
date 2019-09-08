@@ -11,5 +11,5 @@ public class MainController {
     @GetMapping
     public String mainView(){
         return "/main";
-    }
+    };
 }

@@ -1,5 +1,6 @@
 package com.dblab.service;
 
+import com.dblab.controller.ProjectRestController;
 import com.dblab.domain.Project;
 import com.dblab.domain.User;
 import com.dblab.dto.ProjectDto;
@@ -10,7 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @Service
 public class ProjectService {
@@ -34,11 +36,15 @@ public class ProjectService {
         projectRepository.deleteById(idx);
     }
 
-//    public Page<Project> showProject(Pageable pageable) {
-//
-//        Page<Project> projects = projectRepository.findAll(pageable);
-//        PagedResources.PageMetadata pageMetadata = new PagedResources.PageMetadata(pageable.getPageSize(), projects.getNumber(), projects.getTotalElements());
-//
-//
-//    }
+    public PagedResources<Project> getProjects(Pageable pageable, User currentUser) {
+
+        Page<Project> projects = projectRepository.findAllByUser(pageable, currentUser);
+        PagedResources.PageMetadata pageMetadata = new PagedResources.PageMetadata(pageable.getPageSize(), projects.getNumber(), projects.getTotalElements());
+        PagedResources<Project> resources = new PagedResources<>(projects.getContent(), pageMetadata);
+        resources.add(linkTo(methodOn(ProjectRestController.class).projectView(pageable)).withSelfRel());
+
+        return resources;
+
+    }
+
 }

@@ -21,6 +21,15 @@ public class UserService {
         userRepository.save(userDTO.setUser());
     }
 
+    public void uploadImage(User currentUser, String url)    {
+        UserDto userDto = new UserDto();
+        userDto.setProfile(url);
+
+        User user = userRepository.findByUsername(currentUser.getUsername());
+        user.uploadImage(userDto);
+        userRepository.save(user);
+    }
+
     public User currentUser(org.springframework.security.core.userdetails.User user) {
         return userRepository.findByUsername(user.getUsername());
     }

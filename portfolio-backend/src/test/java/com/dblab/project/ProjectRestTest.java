@@ -54,7 +54,7 @@ public class ProjectRestTest {
     private ProjectService projectService;
 
     @Autowired
-    CustomUserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     private UserDetails userDetails;
 
@@ -109,7 +109,7 @@ public class ProjectRestTest {
 
         assertThat(user.getProjects().size()).isEqualTo(10);
 
-        mockMvc.perform(get("/api/project")
+        mockMvc.perform(get("/api/projects")
                 .with(csrf())
                 .with(user(userDetails)))
                 .andDo(print())
@@ -126,7 +126,7 @@ public class ProjectRestTest {
         projectDto.setDescription("description_test");
 
         // post
-        mockMvc.perform(post("/api/project")
+        mockMvc.perform(post("/api/projects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(projectDto))
                 .with(csrf())
@@ -153,7 +153,7 @@ public class ProjectRestTest {
         modifiedProjectDto.setDescription("description_test");
 
         // post
-        mockMvc.perform(post("/api/project")
+        mockMvc.perform(post("/api/projects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(modifiedProjectDto))
                 .with(csrf())
@@ -175,7 +175,7 @@ public class ProjectRestTest {
         modifiedProjectDto.setDescription("modified_description_test");
 
         // put
-        mockMvc.perform(put("/api/project/1")
+        mockMvc.perform(put("/api/projects/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(modifiedProjectDto))
                 .with(csrf())
@@ -200,7 +200,7 @@ public class ProjectRestTest {
         deletedProjectDto.setDescription("description_test");
 
         // post
-        mockMvc.perform(post("/api/project")
+        mockMvc.perform(post("/api/projects")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(deletedProjectDto))
                 .with(csrf())
@@ -216,7 +216,7 @@ public class ProjectRestTest {
         assertThat(deletedProject.getDescription()).isEqualTo("description_test");
 
         // delete
-        mockMvc.perform(delete("/api/project/1")
+        mockMvc.perform(delete("/api/projects/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(deletedProject))
                 .with(csrf())

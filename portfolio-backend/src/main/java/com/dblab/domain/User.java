@@ -2,6 +2,11 @@ package com.dblab.domain;
 
 import com.dblab.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+<<<<<<< HEAD
+=======
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+>>>>>>> master
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +33,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
@@ -40,6 +46,7 @@ public class User {
     private LocalDateTime registeredDate;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<Introduction> introductions;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)

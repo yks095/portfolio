@@ -53,8 +53,12 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Project> projects;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<License> licenses;
+
     @Builder
-    public User(String username, String password, String email, String profile, String gitAddr, LocalDateTime registeredDate, Set<Introduction> introductions, Set<Project> projects) {
+    public User(String username, String password, String email, String profile, String gitAddr, LocalDateTime registeredDate,
+                Set<Introduction> introductions, Set<Project> projects, Set<License> licenses) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -63,6 +67,7 @@ public class User {
         this.registeredDate = registeredDate;
         this.introductions = introductions;
         this.projects = projects;
+        this.licenses = licenses;
     }
 
     public void uploadImage(UserDto userDto) {

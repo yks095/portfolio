@@ -57,6 +57,7 @@ public class UserTest {
         userDTO.setUsername("testId");
         userDTO.setPassword("testPassword");
         userDTO.setEmail("test@gmail.com");
+        userDTO.setGitAddr("https://github.com/testId");
 
         //유저 등록
         mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
@@ -68,6 +69,7 @@ public class UserTest {
         assertThat(user).isNotNull();
         assertThat(user.getUsername()).isEqualTo("testId");
         assertThat(user.getEmail()).isEqualTo("test@gmail.com");
+        assertThat(user.getGitAddr()).isEqualTo("https://github.com/testId");
 
         // 현재 유저 이미지 등록
         userService.uploadImage(user, url);
@@ -83,6 +85,7 @@ public class UserTest {
         assertThat(user2.getUsername()).isEqualTo("testId");
         assertThat(user2.getEmail()).isEqualTo("test@gmail.com");
         assertThat(user2.getProfile()).isEqualTo("test_url");
+        assertThat(user2.getGitAddr()).isEqualTo("https://github.com/testId");
 
     }
 
@@ -92,6 +95,7 @@ public class UserTest {
         userDTO.setUsername("testId");
         userDTO.setPassword("testPassword");
         userDTO.setEmail("test@gmail.com");
+        userDTO.setGitAddr("https://github.com/testId");
 
         //유저 등록
         mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
@@ -103,6 +107,7 @@ public class UserTest {
         assertThat(user).isNotNull();
         assertThat(user.getUsername()).isEqualTo("testId");
         assertThat(user.getEmail()).isEqualTo("test@gmail.com");
+        assertThat(user.getGitAddr()).isEqualTo("https://github.com/testId");
 
         //아이디가 4자 미만일 경우
         userDTO.setUsername("id");
@@ -164,6 +169,19 @@ public class UserTest {
         //데이터 베이스 확인
         user = userRepository.findByIdx(2L);
         assertThat(user).isNull();
+
+        //URL 형식이 틀렸을 경우
+        userDTO.setEmail("test@gmail.com");
+        userDTO.setGitAddr("address");
+
+        //유저 등록
+        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+        //데이터 베이스 확인
+        user = userRepository.findByIdx(2L);
+        assertThat(user).isNull();
+
     }
 
 }

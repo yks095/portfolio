@@ -3,6 +3,7 @@ package com.dblab.dto;
 import com.dblab.domain.Project;
 import com.dblab.domain.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ProjectDto {
 
     @NotBlank(message = "필수 항목입니다.")

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,7 +34,7 @@ public class ProjectRestController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> projectView(@PageableDefault Pageable pageable){
-        
+
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         currentUser = userService.currentUser(user);
@@ -42,16 +43,23 @@ public class ProjectRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto){
-        projectService.saveProject(projectDto, currentUser);
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+    public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+        else {
+            projectService.saveProject(projectDto, currentUser);
+            return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        }
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto){
-        projectService.modifyProject(idx, projectDto);
-
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+        else {
+            projectService.modifyProject(idx, projectDto);
+            return new ResponseEntity<>("{}", HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{idx}")

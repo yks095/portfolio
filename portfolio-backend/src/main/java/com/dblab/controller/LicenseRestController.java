@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,16 +46,23 @@ public class LicenseRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveLicense(@Valid @RequestBody LicenseDto licenseDto){
-        licenseService.saveLicense(licenseDto, currentUser);
-        return new ResponseEntity<>("{}", HttpStatus.CREATED);
+    public ResponseEntity<?> saveLicense(@Valid @RequestBody LicenseDto licenseDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+        else {
+            licenseService.saveLicense(licenseDto, currentUser);
+            return new ResponseEntity<>("{}", HttpStatus.CREATED);
+        }
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> modifyLicense(@PathVariable("idx") Long idx, @Valid @RequestBody LicenseDto licenseDto){
-        licenseService.modifyLicense(idx, licenseDto);
-
-        return new ResponseEntity<>("{}", HttpStatus.OK);
+    public ResponseEntity<?> modifyLicense(@PathVariable("idx") Long idx, @Valid @RequestBody LicenseDto licenseDto, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+        else    {
+            licenseService.modifyLicense(idx, licenseDto);
+            return new ResponseEntity<>("{}", HttpStatus.OK);
+        }
     }
 
     @DeleteMapping("/{idx}")

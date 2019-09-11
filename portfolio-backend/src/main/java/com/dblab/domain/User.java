@@ -4,7 +4,6 @@ import com.dblab.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +40,7 @@ public class User {
     @Column(length = 10000)
     private String profile;
 
-    @Column
+    @Column(length = 1000)
     private String gitAddr;
 
     @Column(nullable = false)

@@ -71,6 +71,8 @@ public class ProjectRestTest {
         userDto.setUsername("username");
         userDto.setPassword("password");
         userDto.setEmail("email@gmail.com");
+        userDto.setProfile("user_profileImg");
+        userDto.setGitAddr("https://github.com/username");
 
         // user 생성
         mockMvc.perform(post("/user")
@@ -119,6 +121,12 @@ public class ProjectRestTest {
 
     @Test
     public void saveProjectTest() throws Exception  {
+
+        mockMvc.perform(get("/api/projects")
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
+
         ProjectDto projectDto = new ProjectDto();
         projectDto.setName("name_test");
         projectDto.setPeriod("period_test");
@@ -146,6 +154,12 @@ public class ProjectRestTest {
 
     @Test
     public void modifyProjectTest() throws Exception  {
+
+        mockMvc.perform(get("/api/projects")
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
+
         ProjectDto modifiedProjectDto = new ProjectDto();
         modifiedProjectDto.setName("name_test");
         modifiedProjectDto.setPeriod("period_test");
@@ -168,7 +182,7 @@ public class ProjectRestTest {
         assertThat(modifiedProject.getPersons()).isEqualTo("persons_test");
         assertThat(modifiedProject.getDescription()).isEqualTo("description_test");
 
-        // 이름, 기간, 인원, 내용, 수정
+        // 이름, 기간, 인원, 내용 수정
         modifiedProjectDto.setName("modified_name_test");
         modifiedProjectDto.setPeriod("modified_period_test");
         modifiedProjectDto.setPersons("modified_persons_test");
@@ -193,6 +207,12 @@ public class ProjectRestTest {
 
     @Test
     public void deleteProjectTest() throws Exception  {
+
+        mockMvc.perform(get("/api/projects")
+                .with(csrf())
+                .with(user(userDetails)))
+                .andExpect(status().isOk());
+
         ProjectDto deletedProjectDto = new ProjectDto();
         deletedProjectDto.setName("name_test");
         deletedProjectDto.setPeriod("period_test");

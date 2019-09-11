@@ -2,11 +2,9 @@ package com.dblab.domain;
 
 import com.dblab.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-<<<<<<< HEAD
-=======
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
->>>>>>> master
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,6 +41,9 @@ public class User {
     @Column(length = 10000)
     private String profile;
 
+    @Column
+    private String gitAddr;
+
     @Column(nullable = false)
     private LocalDateTime registeredDate;
 
@@ -54,17 +55,22 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Project> projects;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<License> licenses;
+
     @Builder
-    public User(String username, String password, String email, String profile, LocalDateTime registeredDate, Set<Introduction> introductions, Set<Project> projects) {
+    public User(String username, String password, String email, String profile, String gitAddr, LocalDateTime registeredDate,
+                Set<Introduction> introductions, Set<Project> projects, Set<License> licenses) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.profile = profile;
+        this.gitAddr = gitAddr;
         this.registeredDate = registeredDate;
         this.introductions = introductions;
         this.projects = projects;
+        this.licenses = licenses;
     }
-
 
     public void uploadImage(UserDto userDto) {
         this.profile = userDto.getProfile();

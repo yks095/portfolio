@@ -1,9 +1,7 @@
 package com.dblab.service;
 
 import com.dblab.controller.LicenseRestController;
-import com.dblab.controller.ProjectRestController;
 import com.dblab.domain.License;
-import com.dblab.domain.Project;
 import com.dblab.domain.User;
 import com.dblab.dto.LicenseDto;
 import com.dblab.repository.LicenseRepository;

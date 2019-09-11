@@ -30,17 +30,22 @@ public class UserDto {
 
     private String profile;
 
+    @URL(message = "URL 양식을 지켜주세요.")
+    private String gitAddr;
+
     @Builder
-    public UserDto(@NotBlank(message = "필수 항목입니다.") @Size(min = 4, max = 12, message = "아이디는 4자 이상 12장 이하입니다.") String username, @NotBlank(message = "필수 항목입니다.") @Size(min = 6, max = 16, message = "비밀번호는 4자 이상 12자 이하입니다.") String password, @NotBlank(message = "필수 항목입니다.") @Email(message = "이메일의 양식을 지켜주세요.") String email, String profile) {
+    public UserDto(@NotBlank(message = "필수 항목입니다.") @Size(min = 4, max = 12, message = "아이디는 4자 이상 12장 이하입니다.") String username,
+                   @NotBlank(message = "필수 항목입니다.") @Size(min = 6, max = 16, message = "비밀번호는 4자 이상 12자 이하입니다.") String password,
+                   @NotBlank(message = "필수 항목입니다.") @Email(message = "이메일의 양식을 지켜주세요.") String email,
+                   String profile,
+                   @URL(message = "URL 양식을 지켜주세요.") String gitAddr) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.profile = profile;
+        this.gitAddr = gitAddr;
     }
 
-    @URL(message = "URL 양식을 지켜주세요.")
-    private String gitAddr;
-  
     public User setUser() {
         User user = new User();
         user.setUsername(this.username);

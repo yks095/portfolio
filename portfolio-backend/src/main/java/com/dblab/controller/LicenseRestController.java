@@ -2,7 +2,6 @@ package com.dblab.controller;
 
 import com.dblab.domain.User;
 import com.dblab.dto.LicenseDto;
-import com.dblab.dto.ProjectDto;
 import com.dblab.repository.LicenseRepository;
 import com.dblab.service.LicenseService;
 import com.dblab.service.UserService;
@@ -48,7 +47,7 @@ public class LicenseRestController {
     @PostMapping
     public ResponseEntity<?> saveLicense(@Valid @RequestBody LicenseDto licenseDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
             licenseService.saveLicense(licenseDto, currentUser);
             return new ResponseEntity<>("{}", HttpStatus.CREATED);
@@ -58,7 +57,7 @@ public class LicenseRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> modifyLicense(@PathVariable("idx") Long idx, @Valid @RequestBody LicenseDto licenseDto, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else    {
             licenseService.modifyLicense(idx, licenseDto);
             return new ResponseEntity<>("{}", HttpStatus.OK);

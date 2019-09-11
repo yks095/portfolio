@@ -41,7 +41,6 @@ public class IntroductionService {
 
     public PagedResources<Introduction> pagedIntroduction(User currentUser, Pageable pageable) {
         Page<Introduction> introductions = introductionRepository.findAllByUser(currentUser, pageable);
-
         PageMetadata pageMetadata = new PageMetadata(pageable.getPageSize(),
                                                     introductions.getNumber(),
                                                     introductions.getTotalElements());

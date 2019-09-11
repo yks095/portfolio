@@ -8,7 +8,6 @@ import com.dblab.repository.IntroductionRepository;
 import com.dblab.repository.UserRepository;
 import com.dblab.service.CustomUserDetailsService;
 import com.dblab.service.IntroductionService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;

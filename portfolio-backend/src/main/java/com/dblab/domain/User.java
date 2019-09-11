@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -47,7 +48,8 @@ public class User {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<Introduction> introductions;
+    private Set<Introduction> introductions = new HashSet<>();
+
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Project> projects;

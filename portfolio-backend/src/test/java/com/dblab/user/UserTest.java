@@ -5,6 +5,7 @@ import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
 import com.dblab.service.CustomUserDetailsService;
 import com.dblab.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -164,6 +165,76 @@ public class UserTest {
         //데이터 베이스 확인
         user = userRepository.findByIdx(2L);
         assertThat(user).isNull();
+    }
+
+    @Test
+    public void 유저아이디_중복_테스트() throws Exception {
+
+        //유저 생성
+        UserDto userDto = UserDto.builder()
+                            .username("testId")
+                            .password("testPassword")
+                            .email("test@gmail.com")
+                            .build();
+
+        //유저 등록, 성공 확인
+        mockMvc.perform(post("/user")
+                .content(mapper.writeValueAsString(userDto))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isCreated());
+
+        //같은 아이디의 유저 등록, 실패 확인
+        mockMvc.perform(post("/user")
+                .content(mapper.writeValueAsString(userDto))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+
+        //다른 아이디의 유저 생성
+        userDto = UserDto.builder().username("testId2").password("testPassword").email("test@gmail.com").build();
+
+        //유저 등록, 성공 확인
+        mockMvc.perform(post("/user")
+                        .content(mapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void 유효성검사_실패시_반환메시지_확인() throws Exception {
+
+        //아이디가 유효성검사에 실패하는 경우
+        UserDto userDto = new UserDto();
+        userDto.setUsername("tes");
+        userDto.setPassword("testPassword");
+        userDto.setEmail("test@gmail.com");
+
+        mockMvc.perform(post("/user")
+                        .content(mapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
+
+        //비밀번호가 유효성검사에 실패하는 경우
+        userDto.setUsername("testId");
+        userDto.setPassword("test");
+
+        mockMvc.perform(post("/user")
+                        .content(mapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
+
+        //이메일이 유효성검사에 실패하는 경우
+        userDto.setPassword("testPassword");
+        userDto.setEmail("test.com");
+        mockMvc.perform(post("/user")
+                        .content(mapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
     }
 
 }

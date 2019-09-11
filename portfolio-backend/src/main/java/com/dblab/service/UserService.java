@@ -33,4 +33,11 @@ public class UserService {
     public User currentUser(org.springframework.security.core.userdetails.User user) {
         return userRepository.findByUsername(user.getUsername());
     }
+
+
+    //유저 아이디 중복검사
+    public boolean userRedunduncyCheck(UserDto userDTO) {
+        return userRepository.findByUsername(userDTO.getUsername()) != null;
+
+    }
 }

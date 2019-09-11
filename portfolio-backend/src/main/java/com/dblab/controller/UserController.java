@@ -32,10 +32,15 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDTO, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
-            userService.passwordEncodeAndSave(userDTO);
-            return new ResponseEntity<>("{}", HttpStatus.CREATED);
+            if(userService.userRedunduncyCheck(userDTO)){
+                return new ResponseEntity<>("중복된 ID", HttpStatus.BAD_REQUEST);
+            }
+            else {
+                userService.passwordEncodeAndSave(userDTO);
+                return new ResponseEntity<>("{}", HttpStatus.CREATED);
+            }
         }
     }
 

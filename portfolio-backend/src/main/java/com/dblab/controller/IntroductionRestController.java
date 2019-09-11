@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,7 +51,8 @@ public class IntroductionRestController {
     @PostMapping
     public ResponseEntity<?> postIntroductions(@Valid  @RequestBody IntroductionDto introductionDto,
                                                BindingResult bindingResult){
-        if(bindingResult.hasErrors()) return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+
+        if(bindingResult.hasErrors()) return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
             introductionService.saveIntroduction(introductionDto, currentUser);
             return new ResponseEntity<>("{}", HttpStatus.CREATED);

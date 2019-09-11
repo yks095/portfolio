@@ -31,6 +31,7 @@ class Introduction extends React.Component {
                     this.state.introductions.map(c => {
                         return (<IntroductionPanel
                             key={c.idx}
+                            idx={c.idx}
                             title={c.title}
                             growth={c.growth}
                             reason={c.reason}

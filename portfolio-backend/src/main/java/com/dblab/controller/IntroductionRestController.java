@@ -29,6 +29,8 @@ public class IntroductionRestController {
 
     private User currentUser;
 
+
+    //
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getIntroductions(@PageableDefault Pageable pageable){
         //현재 유저와 매핑

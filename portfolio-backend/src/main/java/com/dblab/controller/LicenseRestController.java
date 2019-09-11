@@ -1,9 +1,10 @@
 package com.dblab.controller;
 
 import com.dblab.domain.User;
+import com.dblab.dto.LicenseDto;
 import com.dblab.dto.ProjectDto;
-import com.dblab.repository.ProjectRepository;
-import com.dblab.service.ProjectService;
+import com.dblab.repository.LicenseRepository;
+import com.dblab.service.LicenseService;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,54 +19,57 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/projects")
-public class ProjectRestController {
-
-    @Autowired
-    ProjectService projectService;
+@RequestMapping("/api/licenses")
+public class LicenseRestController {
 
     @Autowired
     UserService userService;
 
     @Autowired
-    ProjectRepository projectRepository;
+    LicenseRepository licenseRepository;
+
+    @Autowired
+    LicenseService licenseService;
 
     private User currentUser;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> projectView(@PageableDefault Pageable pageable){
+    public ResponseEntity<?> licenseView(@PageableDefault Pageable pageable) {
 
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         currentUser = userService.currentUser(user);
 
-        return ResponseEntity.ok(projectService.getProjects(pageable, currentUser));
+        return ResponseEntity.ok(licenseService.getLicenses(pageable, currentUser));
+
     }
 
     @PostMapping
-    public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+    public ResponseEntity<?> saveLicense(@Valid @RequestBody LicenseDto licenseDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
         else {
-            projectService.saveProject(projectDto, currentUser);
+            licenseService.saveLicense(licenseDto, currentUser);
             return new ResponseEntity<>("{}", HttpStatus.CREATED);
         }
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult){
+    public ResponseEntity<?> modifyLicense(@PathVariable("idx") Long idx, @Valid @RequestBody LicenseDto licenseDto, BindingResult bindingResult){
         if(bindingResult.hasErrors())
             return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
-        else {
-            projectService.modifyProject(idx, projectDto);
+        else    {
+            licenseService.modifyLicense(idx, licenseDto);
             return new ResponseEntity<>("{}", HttpStatus.OK);
         }
     }
 
     @DeleteMapping("/{idx}")
-    public ResponseEntity<?> deleteProject(@PathVariable("idx") Long idx){
-        projectService.deleteProject(idx);
+    public ResponseEntity<?> deleteLicense(@PathVariable("idx") Long idx){
+        licenseService.deleteLicense(idx);
 
         return new ResponseEntity<>("{}", HttpStatus.OK);
     }
+
 }

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -37,11 +38,15 @@ public class UserDto {
         this.profile = profile;
     }
 
+    @URL(message = "URL 양식을 지켜주세요.")
+    private String gitAddr;
+  
     public User setUser() {
         User user = new User();
         user.setUsername(this.username);
         user.setPassword(this.password);
         user.setEmail(this.email);
+        user.setGitAddr(this.gitAddr);
         user.setRegisteredDate(LocalDateTime.now());
         return user;
     }

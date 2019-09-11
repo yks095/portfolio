@@ -1,8 +1,12 @@
 package com.dblab.domain;
 
+import com.dblab.dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+<<<<<<< HEAD
+=======
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+>>>>>>> master
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -36,6 +39,9 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @Column(length = 10000)
+    private String profile;
+
     @Column(nullable = false)
     private LocalDateTime registeredDate;
 
@@ -43,12 +49,22 @@ public class User {
     @JsonIgnore
     private Set<Introduction> introductions;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Project> projects;
+
     @Builder
-    public User(String username, String password, String email, LocalDateTime registeredDate, Set<Introduction> introductions) {
+    public User(String username, String password, String email, String profile, LocalDateTime registeredDate, Set<Introduction> introductions, Set<Project> projects) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.profile = profile;
         this.registeredDate = registeredDate;
         this.introductions = introductions;
+        this.projects = projects;
+    }
+
+
+    public void uploadImage(UserDto userDto) {
+        this.profile = userDto.getProfile();
     }
 }

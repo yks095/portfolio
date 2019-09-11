@@ -47,13 +47,13 @@ public class PortfolioApplication {
                     index -> {
                         IntroductionDto introductionDto =
                                 IntroductionDto.builder()
-                                                .title("제목" + index)
-                                                .growth("성장 과정" + index)
-                                                .aspiration("입사 후 포부" + index)
-                                                .build();
+                                        .title("제목" + index)
+                                        .growth("성장 과정" + index)
+                                        .aspiration("입사 후 포부" + index)
+                                        .build();
 
                         introductionService.saveIntroduction(introductionDto,currentUser);
-                        }
+                    }
             );
 
 

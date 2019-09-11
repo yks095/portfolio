@@ -25,6 +25,8 @@ public class UserDto {
     @Email(message = "이메일의 양식을 지켜주세요.")
     private String email;
 
+    private String profile;
+
     public User setUser() {
         User user = new User();
         user.setUsername(this.username);
@@ -33,4 +35,5 @@ public class UserDto {
         user.setRegisteredDate(LocalDateTime.now());
         return user;
     }
+
 }

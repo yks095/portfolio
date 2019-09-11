@@ -1,5 +1,6 @@
 package com.dblab.domain;
 
+import com.dblab.dto.ProjectDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,9 @@ public class Project implements Serializable {
     @Column
     private LocalDateTime registeredDate;
 
+    @ManyToOne
+    private User user;
+
     @Builder
     public Project(String name, String period, String persons, String description, LocalDateTime registeredDate) {
         this.name = name;
@@ -45,10 +49,17 @@ public class Project implements Serializable {
     }
 
 
-    public void modifyProject(Project project) {
-        this.name = project.getName();
-        this.period = project.getPeriod();
-        this.persons = project.getPersons();
-        this.description = project.getDescription();
+    public void modifyProject(ProjectDto projectDto) {
+        this.name = projectDto.getName();
+        this.period = projectDto.getPeriod();
+        this.persons = projectDto.getPersons();
+        this.description = projectDto.getDescription();
+    }
+
+    public void setUsers(User currentUser) {
+        if(this.user != null) this.user.getProjects().remove(this);
+
+        this.user = currentUser;
+        currentUser.getProjects().add(this);
     }
 }

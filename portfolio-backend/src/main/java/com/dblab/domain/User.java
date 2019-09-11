@@ -39,7 +39,7 @@ public class User {
     @Column(length = 10000)
     private String profile;
 
-    @Column
+    @Column(length = 1000)
     private String gitAddr;
 
     @Column(nullable = false)

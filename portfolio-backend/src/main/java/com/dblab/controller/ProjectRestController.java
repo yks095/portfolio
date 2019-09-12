@@ -45,7 +45,7 @@ public class ProjectRestController {
     @PostMapping
     public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors())
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
             projectService.saveProject(projectDto, currentUser);
             return new ResponseEntity<>("{}", HttpStatus.CREATED);
@@ -55,7 +55,7 @@ public class ProjectRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
             projectService.modifyProject(idx, projectDto);
             return new ResponseEntity<>("{}", HttpStatus.OK);

@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import IntroductionEdit from './IntroductionEdit';
+import IntroductionDelete from './IntroductionDelete';
 
 
 
@@ -124,6 +125,10 @@ class Introduction extends React.Component {
                                         </Typography>
                                     </CardContent>
                                 </Card>
+                                <IntroductionDelete
+                                    key={this.props.idx}
+                                    idx={this.props.idx}
+                                    title={this.props.title}/>
                                 <IntroductionEdit
                                     key={this.props.idx}
                                     idx={this.props.idx}

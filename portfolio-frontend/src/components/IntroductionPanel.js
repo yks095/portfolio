@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import IntroductionEdit from './IntroductionEdit';
+import IntroductionDelete from './IntroductionDelete';
 
 
 
@@ -41,12 +42,23 @@ class Introduction extends React.Component {
     constructor(props) {
         super();
         this.state = {
-            title: "123"
+            title: "",
+            reason: "",
+            strength: "",
+            weakness: "",
+            aspiration: "",
         }
     }
 
     componentDidMount = () => {
-        console.log(this.props)
+        this.setState({
+            title: this.props.title,
+            growth: this.props.growth,
+            reason: this.props.reason,
+            strength: this.props.strength,
+            weakness: this.props.weakness,
+            aspiration: this.props.aspiration
+        })
     }
 
     render() {
@@ -59,7 +71,7 @@ class Introduction extends React.Component {
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
                             id="panel1a-header">
-                            <Typography variant="h5" component="h2" >{this.props.title}</Typography>
+                            <Typography variant="h5" component="h2" >{this.state.title}</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <div className={classes.card}>
@@ -69,7 +81,7 @@ class Introduction extends React.Component {
                                             성장 과정
                                     </Typography>
                                         <Typography variant="body2" component="p">
-                                            {this.props.growth}
+                                            {this.state.growth}
                                         </Typography>
                                     </CardContent>
                                 </Card>
@@ -79,7 +91,7 @@ class Introduction extends React.Component {
                                             지원 동기
                                     </Typography>
                                         <Typography variant="body2" component="p">
-                                            {this.props.reason}
+                                            {this.state.reason}
                                         </Typography>
                                     </CardContent>
                                 </Card>
@@ -89,7 +101,7 @@ class Introduction extends React.Component {
                                             장점
                                     </Typography>
                                         <Typography variant="body2" component="p">
-                                            {this.props.strength}
+                                            {this.state.strength}
                                         </Typography>
                                     </CardContent>
                                 </Card>
@@ -99,7 +111,7 @@ class Introduction extends React.Component {
                                             단점
                                     </Typography>
                                         <Typography variant="body2" component="p">
-                                            {this.props.weakness}
+                                            {this.state.weakness}
                                         </Typography>
                                     </CardContent>
                                 </Card>
@@ -109,18 +121,23 @@ class Introduction extends React.Component {
                                             입사 후 포부
                                     </Typography>
                                         <Typography variant="body2" component="p">
-                                            {this.props.aspiration}
+                                            {this.state.aspiration}
                                         </Typography>
                                     </CardContent>
                                 </Card>
+                                <IntroductionDelete
+                                    key={this.props.idx}
+                                    idx={this.props.idx}
+                                    title={this.props.title}/>
                                 <IntroductionEdit
                                     key={this.props.idx}
-                                    title={this.props.title}
-                                    growth={this.props.growth}
-                                    reason={this.props.reason}
-                                    strength={this.props.strength}
-                                    weakness={this.props.weakness}
-                                    aspiration={this.props.aspiration}
+                                    idx={this.props.idx}
+                                    title={this.state.title}
+                                    growth={this.state.growth}
+                                    reason={this.state.reason}
+                                    strength={this.state.strength}
+                                    weakness={this.state.weakness}
+                                    aspiration={this.state.aspiration}
                                 />
                             </div>
                         </ExpansionPanelDetails>

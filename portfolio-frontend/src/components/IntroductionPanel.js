@@ -126,9 +126,8 @@ class Introduction extends React.Component {
                                     </CardContent>
                                 </Card>
                                 <IntroductionDelete
-                                    key={this.props.idx}
                                     idx={this.props.idx}
-                                    title={this.props.title}/>
+                                    title={this.props.title} />
                                 <IntroductionEdit
                                     key={this.props.idx}
                                     idx={this.props.idx}

@@ -20,12 +20,6 @@ import java.util.function.Function;
 @Component
 public class JwtTokenUtil {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
     //3시간 후 만료
     private static final long JWT_TOKEN_VALIDITY = 3 * 1000 * 60 * 60;
 

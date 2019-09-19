@@ -48,19 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-
-//        http.formLogin()
-//                .loginPage("/login")
-//                .failureUrl("/login?error")
-//                .successForwardUrl("/login/success")
-//                .permitAll();
-
-        http.logout()
-                .logoutSuccessUrl("/login")
-//                .deleteCookies("JSESSIONID")
-//                .invalidateHttpSession(true)
-                .permitAll();
-
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -70,7 +70,17 @@ public class JwtTest {
                         .with(csrf()))
                         .andExpect(status().isOk())
                         .andDo(print());
+
+        //인증되지 않은 사용자
+        userDto.setUsername("testId2");
+
+        mockMvc.perform(post("/login/authenticate")
+                        .content(objectMapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().is4xxClientError()) //filter에서 db에 없는 값을
+                        .andDo(print());
     }
+
 
     @Test
     public void JWT_정상동작_확인() throws Exception {

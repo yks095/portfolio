@@ -40,4 +40,9 @@ public class UserService {
         return userRepository.findByUsername(userDTO.getUsername()) != null;
 
     }
+
+    //유저 아이디를 통해 유저 객체를 반환하는 메소드
+    public User findUserByUsername(UserDto userDto) {
+        return userRepository.findByUsername(userDto.getUsername());
+    }
 }

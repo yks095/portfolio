@@ -6,6 +6,7 @@ import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
 import com.dblab.service.CustomUserDetailsService;
+import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class LoginController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private UserService userService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -54,12 +55,16 @@ public class LoginController {
 
         else{
             authenticate(userDto.getUsername(), userDto.getPassword());
-            final UserDetails userDetails = customUserDetailsService.loadUserByUsername(userDto.getUsername());
 
-            User currentUser = userRepository.findByUsername(userDto.getUsername());
+            User currentUser = userService.findUserByUsername(userDto);
 
-            final String token = jwtTokenUtil.generateToken(currentUser);
-            return ResponseEntity.ok(new JwtToken(token));
+            if (currentUser == null) return new ResponseEntity<>(userDto.getUsername() + " 유저를 찾을 수 없습니다."
+                                                                    , HttpStatus.BAD_REQUEST);
+            else{
+                final String token = jwtTokenUtil.generateToken(currentUser);
+                return ResponseEntity.ok(new JwtToken(token));
+            }
+
         }
     }
 

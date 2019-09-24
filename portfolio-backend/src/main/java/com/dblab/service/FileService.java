@@ -52,7 +52,7 @@ public class FileService {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/file/")
+                .path("/api/files/")
                 .path(fileName)
                 .toUriString();
 

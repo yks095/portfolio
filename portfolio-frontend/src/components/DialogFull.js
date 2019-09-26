@@ -57,8 +57,7 @@ class DialogFull extends React.Component {
     };
 
     state = {
-        open: this.props.open,
-        page: this.props.page
+        open: false,
     };
 
     render() {
@@ -75,13 +74,13 @@ class DialogFull extends React.Component {
                         </IconButton>
                     </div>
                     <div className={classes.root}>
-                        <Button className={classes.dialogButton} onClick={this.props.handleHomeButton}>MAIN</Button>
+                        <Button className={classes.dialogButton} href="/">MAIN</Button>
                         <br />
                         <Button className={classes.dialogButton}>마이 페이지</Button>
                         <br />
                         <Button className={classes.dialogButton}>회원정보 수정</Button>
                         <br />
-                        <Button className={classes.dialogButton}>로그아웃</Button>
+                        <Button className={classes.dialogButton} href="/signIn">로그아웃</Button>
                     </div>
                 </Dialog>
             </div>

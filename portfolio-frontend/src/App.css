@@ -2,10 +2,31 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
+.App-Background {
+  background-image:url(./images/backImg.jpg);
+  overflow:hidden;
+  position:relative;
+  width:100%;
+  max-width:2560px;
+  height:100vh;
+  min-height:740px;
+  margin:0 auto;
+  background-position:50% 80%;
+  background-repeat:no-repeat;
+  background-size:cover;
+  filter: brightness(70%);
+}
+
+.Title_Text {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  color: black;
+  font-weight: bold;
+  font-size: 500%;
+  text-align: center
 }
 
 .App-header {

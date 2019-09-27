@@ -5,6 +5,7 @@ import com.dblab.domain.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
@@ -19,9 +20,12 @@ public class ProjectDto {
 
     private String period;
 
-    private String persons;
-
     private String description;
+
+    private String image;
+
+    @URL(message = "URL 양식을 지켜주세요.")
+    private String gitAddr;
 
     private LocalDateTime registeredDate;
 
@@ -32,8 +36,9 @@ public class ProjectDto {
 
         project.setName(this.name);
         project.setPeriod(this.period);
-        project.setPersons(this.persons);
         project.setDescription(this.description);
+        project.setImage(this.image);
+        project.setGitAddr(this.gitAddr);
         project.setRegisteredDate(LocalDateTime.now());
         project.setUsers(user);
 

@@ -28,10 +28,13 @@ public class Project implements Serializable {
     private String period;
 
     @Column
-    private String persons;
+    private String description;
 
     @Column
-    private String description;
+    private String image;
+
+    @Column
+    private String gitAddr;
 
     @Column
     private LocalDateTime registeredDate;
@@ -40,20 +43,22 @@ public class Project implements Serializable {
     private User user;
 
     @Builder
-    public Project(String name, String period, String persons, String description, LocalDateTime registeredDate) {
+    public Project(String name, String period, String description, String image, String gitAddr, LocalDateTime registeredDate, User user) {
         this.name = name;
         this.period = period;
-        this.persons = persons;
         this.description = description;
+        this.image = image;
+        this.gitAddr = gitAddr;
         this.registeredDate = registeredDate;
+        this.user = user;
     }
-
 
     public void modifyProject(ProjectDto projectDto) {
         this.name = projectDto.getName();
         this.period = projectDto.getPeriod();
-        this.persons = projectDto.getPersons();
         this.description = projectDto.getDescription();
+        this.image = projectDto.getImage();
+        this.gitAddr = projectDto.getGitAddr();
     }
 
     public void setUsers(User currentUser) {

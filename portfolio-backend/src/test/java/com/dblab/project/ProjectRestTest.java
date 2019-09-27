@@ -104,8 +104,9 @@ public class ProjectRestTest {
             ProjectDto projectDto = new ProjectDto();
             projectDto.setName("name" + i);
             projectDto.setPeriod("period" + i);
-            projectDto.setPersons("persons" + i);
             projectDto.setDescription("description" + i);
+            projectDto.setImage("image" + i);
+            projectDto.setGitAddr("www.github.com/test" + i);
             projectService.saveProject(projectDto, user);
         }
 
@@ -130,8 +131,9 @@ public class ProjectRestTest {
         ProjectDto projectDto = new ProjectDto();
         projectDto.setName("name_test");
         projectDto.setPeriod("period_test");
-        projectDto.setPersons("persons_test");
         projectDto.setDescription("description_test");
+        projectDto.setImage("image_test");
+        projectDto.setGitAddr("www.github.com/test");
 
         // post
         mockMvc.perform(post("/api/projects")
@@ -146,8 +148,9 @@ public class ProjectRestTest {
         assertThat(project).isNotNull();
         assertThat(project.getName()).isEqualTo("name_test");
         assertThat(project.getPeriod()).isEqualTo("period_test");
-        assertThat(project.getPersons()).isEqualTo("persons_test");
         assertThat(project.getDescription()).isEqualTo("description_test");
+        assertThat(project.getImage()).isEqualTo("image_test");
+        assertThat(project.getGitAddr()).isEqualTo("www.github.com/test");
 
 
     }
@@ -163,8 +166,9 @@ public class ProjectRestTest {
         ProjectDto modifiedProjectDto = new ProjectDto();
         modifiedProjectDto.setName("name_test");
         modifiedProjectDto.setPeriod("period_test");
-        modifiedProjectDto.setPersons("persons_test");
         modifiedProjectDto.setDescription("description_test");
+        modifiedProjectDto.setImage("image_test");
+        modifiedProjectDto.setGitAddr("www.github.com/test");
 
         // post
         mockMvc.perform(post("/api/projects")
@@ -179,14 +183,14 @@ public class ProjectRestTest {
         assertThat(modifiedProject).isNotNull();
         assertThat(modifiedProject.getName()).isEqualTo("name_test");
         assertThat(modifiedProject.getPeriod()).isEqualTo("period_test");
-        assertThat(modifiedProject.getPersons()).isEqualTo("persons_test");
         assertThat(modifiedProject.getDescription()).isEqualTo("description_test");
 
         // 이름, 기간, 인원, 내용 수정
         modifiedProjectDto.setName("modified_name_test");
         modifiedProjectDto.setPeriod("modified_period_test");
-        modifiedProjectDto.setPersons("modified_persons_test");
         modifiedProjectDto.setDescription("modified_description_test");
+        modifiedProjectDto.setImage("modified_image_test");
+        modifiedProjectDto.setGitAddr("www.github.com/modified_test");
 
         // put
         mockMvc.perform(put("/api/projects/1")
@@ -201,8 +205,9 @@ public class ProjectRestTest {
         assertThat(modifiedProject).isNotNull();
         assertThat(modifiedProject.getName()).isEqualTo("modified_name_test");
         assertThat(modifiedProject.getPeriod()).isEqualTo("modified_period_test");
-        assertThat(modifiedProject.getPersons()).isEqualTo("modified_persons_test");
         assertThat(modifiedProject.getDescription()).isEqualTo("modified_description_test");
+        assertThat(modifiedProject.getImage()).isEqualTo("modified_image_test");
+        assertThat(modifiedProject.getGitAddr()).isEqualTo("www.github.com/modified_test");
     }
 
     @Test
@@ -216,8 +221,9 @@ public class ProjectRestTest {
         ProjectDto deletedProjectDto = new ProjectDto();
         deletedProjectDto.setName("name_test");
         deletedProjectDto.setPeriod("period_test");
-        deletedProjectDto.setPersons("persons_test");
         deletedProjectDto.setDescription("description_test");
+        deletedProjectDto.setImage("image_test");
+        deletedProjectDto.setGitAddr("www.github.com/test");
 
         // post
         mockMvc.perform(post("/api/projects")
@@ -232,8 +238,9 @@ public class ProjectRestTest {
         assertThat(deletedProject).isNotNull();
         assertThat(deletedProject.getName()).isEqualTo("name_test");
         assertThat(deletedProject.getPeriod()).isEqualTo("period_test");
-        assertThat(deletedProject.getPersons()).isEqualTo("persons_test");
         assertThat(deletedProject.getDescription()).isEqualTo("description_test");
+        assertThat(deletedProject.getImage()).isEqualTo("image_test");
+        assertThat(deletedProject.getGitAddr()).isEqualTo("www.github.com/test");
 
         // delete
         mockMvc.perform(delete("/api/projects/1")

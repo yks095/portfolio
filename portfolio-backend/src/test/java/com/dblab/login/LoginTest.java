@@ -1,5 +1,6 @@
 package com.dblab.login;
 
+import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
@@ -24,7 +25,9 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -47,6 +50,9 @@ public class LoginTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
 
     @Before
     public void setUp() throws Exception {
@@ -95,5 +101,64 @@ public class LoginTest {
         mockMvc.perform(formLogin().user("testUserPassword").password("ihaventpassword"))
                 .andExpect(redirectedUrl("/login?error"))
                 .andExpect(unauthenticated()).andExpect(status().is3xxRedirection());
+    }
+
+    @Test
+    public void 로그아웃_테스트() throws Exception{
+
+        //유저 생성
+        UserDto userDto = createUserDto(1);
+
+        //유저 등록
+        mockMvc.perform(post("/user")
+                        .content(objectMapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated());
+
+        User user = userRepository.findByUsername("testId1");
+
+        assertThat(user).isNotNull();
+        assertThat(user.getUsername()).isEqualTo("testId1");
+        assertThat(user.getEmail()).isEqualTo("test@gmail.com");
+
+
+        //로그인 --> 토큰 생성 반환 확인
+        mockMvc.perform(post("/login/authenticate")
+                        .content(objectMapper.writeValueAsString(userDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+
+        //데이터베이스에 없는 사용자 --> 로그인 실패
+        UserDto userDto2 = createUserDto(2);
+
+        mockMvc.perform(post("/login/authenticate")
+                .content(objectMapper.writeValueAsString(userDto2))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError());
+
+        //토큰 생성
+        String jwtToken = "Bearer " + jwtTokenUtil.generateToken(user);
+
+        //인증이 필요한 페이지 요청 --> 성공
+        mockMvc.perform(get("/api/projects")
+                        .header("Authorization", jwtToken))
+                        .andExpect(status().isOk());
+
+        //로그아웃
+        mockMvc.perform(get("/logouting")
+                        .header("Authorization", jwtToken))
+                        .andExpect(status().isOk())
+                        .andDo(print());
+
+        //인증이 필요한 페이지 요청 --> 실패
+        mockMvc.perform(get("/api/projects")
+                        .header("Authorization", jwtToken))
+                        .andExpect(status().is4xxClientError());
+
+    }
+
+    //UserDto 객체를 생성하는 메소드
+    public UserDto createUserDto(int idx){
+        return UserDto.builder().username("testId" + idx).password("testPassword").email("test@gmail.com").build();
     }
 }

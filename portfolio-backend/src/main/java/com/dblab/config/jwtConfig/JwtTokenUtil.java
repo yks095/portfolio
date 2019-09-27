@@ -1,13 +1,9 @@
 package com.dblab.config.jwtConfig;
 
 import com.dblab.domain.User;
-import com.dblab.service.CustomUserDetailsService;
-import com.dblab.service.UserService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -61,15 +57,14 @@ public class JwtTokenUtil {
 
     public boolean validateToken(String jwtToken, UserDetails userDetails) {
         String username = usernameFromToken(jwtToken);
-
         return username.equals(userDetails.getUsername()) && isTokenExpired(jwtToken);
     }
-
 
     private boolean isTokenExpired(String jwtToken) {
         Date period = getExpirationFromToken(jwtToken);
         return period.after(new Date());
     }
+
 
     private Date getExpirationFromToken(String jwtToken) {
         return getClaimFromToken(jwtToken, Claims::getExpiration);

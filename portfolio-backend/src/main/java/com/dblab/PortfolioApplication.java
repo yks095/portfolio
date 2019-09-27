@@ -9,6 +9,7 @@ import com.dblab.repository.UserRepository;
 import com.dblab.service.CustomUserDetailsService;
 import com.dblab.service.IntroductionService;
 import com.dblab.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -25,4 +26,10 @@ public class PortfolioApplication {
     public static void main(String[] args) {
         SpringApplication.run(PortfolioApplication.class, args);
     }
+
+    @Bean
+    public ModelMapper modelMapper(){
+        return new ModelMapper();
+    }
+
 }

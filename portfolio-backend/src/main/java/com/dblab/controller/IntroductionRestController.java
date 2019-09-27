@@ -28,10 +28,8 @@ public class IntroductionRestController {
 
     private User currentUser;
 
-
-    //
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getIntroductions(@PageableDefault Pageable pageable){
+    public ResponseEntity<?> getIntroductions(@PageableDefault(size = 5) Pageable pageable){
         //현재 유저와 매핑
         org.springframework.security.core.userdetails.User user
                 = (org.springframework.security.core.userdetails.User)
@@ -63,7 +61,7 @@ public class IntroductionRestController {
                                               @Valid @RequestBody IntroductionDto introductionDto,
                                               BindingResult bindingResult){
         if(bindingResult.hasErrors()) {
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
         else{
             introductionService.modifyIntroduction(idx, introductionDto);

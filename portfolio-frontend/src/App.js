@@ -1,97 +1,27 @@
-import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
-import './App.css';
-import DialogFull from './components/DialogFull';
+import { Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
 import Introduction from './pages/Introduction';
 import Projects from './pages/Projects';
-
-const styles = (theme) => ({
-  button: {
-    margin: theme.spacing(1),
-    color: 'white'
-  }
-});
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import './App.css';
 
 class App extends React.Component {
-
-  handleProjectsButton = () => {
-    this.setState({
-      page: 'Projects'
-    })
-  }
-
-  handleIntroductionButton = () => {
-    console.log("들왔남")
-    this.setState({
-      page: 'Introduction'
-    })
-  }
-
-  handleHomeButton = () => {
-    this.setState({
-      page: 'Home'
-    })
-  }
-
-  handleClickOpen = () => {
-    this.setState({
-      open: true
-    })
-  }
-
-  handleClose = () => {
-    this.setState({
-      open: false
-    })
-  }
-
-  state = {
-    open: false,
-    page: 'Home'
-  }
-
   render() {
     return (
       <div>
-        {
-          (() => {
-            if (this.state.page === 'Home') return (
-              < div className="App-Background" >
-                <DialogFull
-                  page={this.state.page}
-                  handleIntroductionButton={this.handleIntroductionButton}
-                  handleProjectsButton={this.handleProjectsButton}
-                  handleHomeButton={this.handleHomeButton}
-                />
-              </div>)
-            else return <DialogFull
-              page={this.state.page}
-              handleIntroductionButton={this.handleIntroductionButton}
-              handleProjectsButton={this.handleProjectsButton}
-              handleHomeButton={this.handleHomeButton}
-            />
-          })()
-        }
-
-        <div>
-          {
-            (() => {
-              if (this.state.page === 'Home')
-                return <Home
-                  page={this.state.page}
-                  handleIntroductionButton={this.handleIntroductionButton}
-                  handleProjectsButton={this.handleProjectsButton}
-                  handleHomeButton={this.handleHomeButton}
-                />
-              if (this.state.page === 'Projects') return <Projects />
-              if (this.state.page === 'Introduction') return <Introduction />
-            })()
-          }
-        </div>
-      </div >
+        <BrowserRouter>
+          <Route exact path="/" component={Home} />
+          <Route path="/signIn" component={SignIn} />
+          <Route path="/signUp" component={SignUp} />
+          <Route path="/introductions" component={Introduction} />
+          <Route path="/projects" component={Projects} />
+        </BrowserRouter>
+      </div>
     );
   }
 }
 
-export default withStyles(styles)(App);
+export default App;

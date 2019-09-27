@@ -2,6 +2,7 @@ import { Button } from '@material-ui/core';
 import GridList from '@material-ui/core/GridList';
 import { withStyles } from '@material-ui/styles';
 import React from 'react';
+import DialogFull from '../components/DialogFull';
 import './Home.css';
 
 const styles = (theme) => ({
@@ -34,6 +35,7 @@ class Home extends React.Component {
         const { classes } = this.props;
         return (
             <div>
+                <div className="App-Background"><DialogFull /></div>
                 <div className="Title_Text">Hello</div>
                 <div className="Text">
                     My Pages
@@ -43,10 +45,10 @@ class Home extends React.Component {
                         <Button className={classes.button}>
                             마이 페이지
                         </Button>
-                        <Button className={classes.button} onClick = {this.props.handleIntroductionButton}>
+                        <Button className={classes.button} href="/introductions">
                             자기 소개서
                         </Button>
-                        <Button className={classes.button}onClick = {this.props.handleProjectsButton}>
+                        <Button className={classes.button} href="/projects">
                             프로젝트
                         </Button>
                         <Button className={classes.button}>

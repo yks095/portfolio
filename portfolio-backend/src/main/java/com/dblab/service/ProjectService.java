@@ -21,8 +21,8 @@ public class ProjectService {
     ProjectRepository projectRepository;
 
 
-    public void saveProject(ProjectDto projectDto, User user) {
-        projectRepository.save(projectDto.save(user));
+    public void saveProject(ProjectDto projectDto, User user, String uri) {
+        projectRepository.save(projectDto.save(user, uri));
     }
 
     public void modifyProject(Long idx, ProjectDto projectDto) {

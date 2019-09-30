@@ -16,9 +16,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public void passwordEncodeAndSave(UserDto userDTO) {
+    public void passwordEncodeAndSave(UserDto userDTO, String uri) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userRepository.save(userDTO.setUser());
+        userRepository.save(userDTO.setUser(uri));
     }
 
     public void uploadImage(User currentUser, String url)    {

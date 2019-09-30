@@ -3,9 +3,11 @@ package com.dblab.controller;
 import com.dblab.domain.User;
 import com.dblab.dto.ProjectDto;
 import com.dblab.repository.ProjectRepository;
+import com.dblab.service.FileService;
 import com.dblab.service.ProjectService;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -26,6 +30,9 @@ public class ProjectRestController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    FileService fileService;
 
     @Autowired
     ProjectRepository projectRepository;
@@ -42,12 +49,29 @@ public class ProjectRestController {
         return ResponseEntity.ok(projectService.getProjects(pageable, currentUser));
     }
 
+    @GetMapping("/{fileName:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName, HttpServletRequest request){
+
+        return  fileService.loadFileAsResource(fileName, request);
+    }
+
     @PostMapping
-    public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult) {
+    public ResponseEntity<?> saveProject(@Valid ProjectDto projectDto,
+                                         BindingResult bindingResult,
+                                         @RequestParam(value = "file", required = false) MultipartFile file,
+                                         HttpServletRequest request) {
         if (bindingResult.hasErrors())
             return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
-            projectService.saveProject(projectDto, currentUser);
+
+            if(file == null)    {
+                String uri = fileService.setDefaultImage(request);
+                projectService.saveProject(projectDto, currentUser, uri);
+            }
+            else    {
+                String uri = fileService.storeFile(file, request);
+                projectService.saveProject(projectDto, currentUser, uri);
+            }
             return new ResponseEntity<>("{}", HttpStatus.CREATED);
         }
     }

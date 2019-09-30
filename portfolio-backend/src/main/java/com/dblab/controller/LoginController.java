@@ -4,8 +4,6 @@ import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.JwtToken;
 import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
-import com.dblab.repository.UserRepository;
-import com.dblab.service.CustomUserDetailsService;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,9 +31,6 @@ public class LoginController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping("/login")
     public String loginView(){

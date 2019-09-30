@@ -1,20 +1,15 @@
 package com.dblab.domain;
 
 import com.dblab.dto.IntroductionDto;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-@Table
-@Getter
-@Setter
+@Getter @Setter
 public class Introduction implements Serializable {
 
     @Id
@@ -22,27 +17,37 @@ public class Introduction implements Serializable {
     private Long idx;
 
     @Column
-    private String title;
+    private String introductionTitle;
 
-    //성장배경
     @Column
-    private String growth;
+    private String title1;
 
-    //지원동기
     @Column
-    private String reason;
+    private String content1;
 
-    //장점
     @Column
-    private String strength;
+    private String title2;
 
-    //단점
     @Column
-    private String weakness;
+    private String content2;
 
-    //입사 후 포부
     @Column
-    private String aspiration;
+    private String title3;
+
+    @Column
+    private String content3;
+
+    @Column
+    private String title4;
+
+    @Column
+    private String content4;
+
+    @Column
+    private String title5;
+
+    @Column
+    private String content5;
 
     @Column
     private LocalDateTime registeredDate;
@@ -50,26 +55,8 @@ public class Introduction implements Serializable {
     @ManyToOne
     private User user;
 
-    @Builder
-    public Introduction(String title, String growth, String reason, String strength, String weakness, String aspiration, LocalDateTime registeredDate,
-                        User user) {
-        this.title = title;
-        this.growth = growth;
-        this.reason = reason;
-        this.strength = strength;
-        this.weakness = weakness;
-        this.aspiration = aspiration;
-        this.registeredDate = registeredDate;
-        this.user = user;
-    }
-
     public void modifyIntroduction(IntroductionDto introductionDto) {
-        this.title = introductionDto.getTitle();
-        this.growth = introductionDto.getGrowth();
-        this.reason = introductionDto.getReason();
-        this.strength = introductionDto.getStrength();
-        this.weakness = introductionDto.getWeakness();
-        this.aspiration = introductionDto.getAspiration();
+
     }
 
     public void setUsers(User currentUser) {

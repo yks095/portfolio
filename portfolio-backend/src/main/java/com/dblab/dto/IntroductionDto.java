@@ -2,60 +2,41 @@ package com.dblab.dto;
 
 import com.dblab.domain.Introduction;
 import com.dblab.domain.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
+@Builder @NoArgsConstructor @AllArgsConstructor
 public class IntroductionDto {
 
     @NotBlank(message = "필수 항목입니다.")
-    private String title;
+    private String introductionTitle;
 
-    private String growth;
+    private String title1;
 
-    private String reason;
+    private String content1;
 
-    private String strength;
+    private String title2;
 
-    private String weakness;
+    private String content2;
 
-    private String aspiration;
+    private String title3;
 
-    private LocalDateTime registeredDate;
+    private String content3;
 
-    private User user;
+    private String title4;
 
-    @Builder
-    public IntroductionDto(@NotBlank(message = "필수 항목입니다.") String title, String growth, String reason, String strength, String weakness, String aspiration, LocalDateTime registeredDate, User user) {
-        this.title = title;
-        this.growth = growth;
-        this.reason = reason;
-        this.strength = strength;
-        this.weakness = weakness;
-        this.aspiration = aspiration;
-        this.registeredDate = registeredDate;
-        this.user = user;
-    }
+    private String content4;
 
-    public Introduction setIntroduction(User currentUser) {
-        Introduction introduction = new Introduction();
+    private String title5;
 
-        introduction.setTitle(this.title);
-        introduction.setGrowth(this.growth);
-        introduction.setReason(this.reason);
-        introduction.setStrength(this.strength);
-        introduction.setWeakness(this.weakness);
-        introduction.setAspiration(this.aspiration);
-        introduction.setRegisteredDate(LocalDateTime.now());
-        introduction.setUsers(currentUser);
+    private String content5;
 
-        return introduction;
-    }
 }

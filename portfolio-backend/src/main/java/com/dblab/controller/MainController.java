@@ -3,13 +3,14 @@ package com.dblab.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/main")
 public class MainController {
 
     @GetMapping
     public String mainView(){
-        return "/main";
+        return null;
     };
 }

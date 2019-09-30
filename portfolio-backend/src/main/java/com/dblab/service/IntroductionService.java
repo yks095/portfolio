@@ -1,11 +1,15 @@
 package com.dblab.service;
 
 import com.dblab.controller.IntroductionRestController;
+import com.dblab.controller.MainController;
+import com.dblab.controller.ProjectRestController;
 import com.dblab.domain.Introduction;
 import com.dblab.domain.User;
 import com.dblab.dto.IntroductionDto;
 import com.dblab.repository.IntroductionRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.PagedResources;
@@ -22,10 +26,13 @@ public class IntroductionService {
     @Autowired
     private IntroductionRepository introductionRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public void saveIntroduction(IntroductionDto introductionDto, User currentUser) {
-
-
-        introductionRepository.save(introductionDto.setIntroduction(currentUser));
+        Introduction introduction = modelMapper.map(introductionDto, Introduction.class);
+        introduction.setUsers(currentUser);
+        introductionRepository.save(introduction);
     }
 
     public void modifyIntroduction(Long idx, IntroductionDto introductionDto) {
@@ -41,6 +48,7 @@ public class IntroductionService {
 
     public PagedResources<Introduction> pagedIntroduction(User currentUser, Pageable pageable) {
         Page<Introduction> introductions = introductionRepository.findAllByUser(currentUser, pageable);
+
         PageMetadata pageMetadata = new PageMetadata(pageable.getPageSize(),
                                                     introductions.getNumber(),
                                                     introductions.getTotalElements());
@@ -50,6 +58,8 @@ public class IntroductionService {
 
         //hateoas 생성
         pagedResources.add(linkTo(methodOn(IntroductionRestController.class).getIntroductions(pageable)).withSelfRel());
+        pagedResources.add(linkTo(methodOn(ProjectRestController.class).projectView(null)).withRel("projects"));
+        pagedResources.add(linkTo(MainController.class).withRel("main"));
 
         return pagedResources;
     }

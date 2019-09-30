@@ -4,6 +4,8 @@ import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.JwtToken;
 import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
+
+import com.dblab.repository.UserRepository;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,12 +35,12 @@ public class LoginController {
     private JwtTokenUtil jwtTokenUtil;
 
     @GetMapping("/login")
-    public String loginView(){
+    public String loginView() {
         return "/login";
     }
 
     @PostMapping("/login/success")
-    public String loginSuccess(){
+    public String loginSuccess() {
         return "redirect:/main";
     }
 
@@ -47,14 +49,14 @@ public class LoginController {
         if (bindingResult.hasErrors())
             return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
 
-        else{
+        else {
             authenticate(userDto.getUsername(), userDto.getPassword());
 
             User currentUser = userService.findUserByUsername(userDto);
 
             if (currentUser == null) return new ResponseEntity<>(userDto.getUsername() + " 유저를 찾을 수 없습니다."
-                                                                    , HttpStatus.BAD_REQUEST);
-            else{
+                    , HttpStatus.BAD_REQUEST);
+            else {
                 final String token = jwtTokenUtil.generateToken(currentUser);
                 return ResponseEntity.ok(new JwtToken(token));
             }
@@ -65,9 +67,9 @@ public class LoginController {
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException d){
+        } catch (DisabledException d) {
             throw new Exception("USER_DISABLE", d);
-        } catch (BadCredentialsException b){
+        } catch (BadCredentialsException b) {
             throw new Exception("INVALID_CREDENTIALS", b);
         }
     }

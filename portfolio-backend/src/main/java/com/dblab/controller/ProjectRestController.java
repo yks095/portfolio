@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,12 +57,14 @@ public class ProjectRestController {
     }
 
     @PostMapping
+
     public ResponseEntity<?> saveProject(@Valid ProjectDto projectDto,
                                          BindingResult bindingResult,
                                          @RequestParam(value = "file", required = false) MultipartFile file,
                                          HttpServletRequest request) {
         if (bindingResult.hasErrors())
             return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+
         else {
 
             if(file == null)    {
@@ -77,9 +80,9 @@ public class ProjectRestController {
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto, BindingResult bindingResult){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto, Errors errors){
+        if(errors.hasErrors())
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         else {
             projectService.modifyProject(idx, projectDto);
             return new ResponseEntity<>("{}", HttpStatus.OK);

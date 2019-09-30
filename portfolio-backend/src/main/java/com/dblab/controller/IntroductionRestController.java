@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,10 +28,8 @@ public class IntroductionRestController {
 
     private User currentUser;
 
-
-    //
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getIntroductions(@PageableDefault Pageable pageable){
+    public ResponseEntity<?> getIntroductions(@PageableDefault(size = 6) Pageable pageable){
         //현재 유저와 매핑
         org.springframework.security.core.userdetails.User user
                 = (org.springframework.security.core.userdetails.User)
@@ -49,9 +47,9 @@ public class IntroductionRestController {
 
     @PostMapping
     public ResponseEntity<?> postIntroductions(@Valid  @RequestBody IntroductionDto introductionDto,
-                                               BindingResult bindingResult){
+                                               Errors errors){
 
-        if(bindingResult.hasErrors()) return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        if(errors.hasErrors()) return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         else {
             introductionService.saveIntroduction(introductionDto, currentUser);
             return new ResponseEntity<>("{}", HttpStatus.CREATED);
@@ -61,9 +59,9 @@ public class IntroductionRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> putIntroductions(@PathVariable("idx") Long idx,
                                               @Valid @RequestBody IntroductionDto introductionDto,
-                                              BindingResult bindingResult){
-        if(bindingResult.hasErrors()) {
-            return new ResponseEntity<>("{}", HttpStatus.BAD_REQUEST);
+                                              Errors errors){
+        if(errors.hasErrors()) {
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         else{
             introductionService.modifyIntroduction(idx, introductionDto);

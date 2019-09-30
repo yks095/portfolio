@@ -1,5 +1,6 @@
 package com.dblab.introduction;
 
+import com.dblab.common.TestDescription;
 import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.Introduction;
 import com.dblab.domain.User;
@@ -12,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,9 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 public class IntroductionTest {
 
-
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -60,6 +63,7 @@ public class IntroductionTest {
     }
 
     @Test
+    @TestDescription("자기소개서 객체가 정상적으로 생성되는지 테스트")
     public void 자기소개서_도메인_생성() {
         Introduction introduction = Introduction.builder()
                                                 .title1("제목1")
@@ -72,13 +76,12 @@ public class IntroductionTest {
     }
 
     @Test
+    @TestDescription("/api/introductions를 get mapping후 페이징 처리되어 잘 동작하는지 확인")
     public void 자기소개서_겟_매핑() throws Exception{
         //유저 생성
         User user = createUserAndRegister(1);
-
         //jwt 발급
         String jwtToken = BEARER + jwtTokenUtil.generateToken(user);
-
         //현재유저매핑
         getIntroductions(jwtToken);
 
@@ -123,6 +126,7 @@ public class IntroductionTest {
     }
 
     @Test
+    @TestDescription("자기소개서 생성 동작 확인")
     public void 자기소개서_등록() throws Exception {
         //유저 생성
         User user = createUserAndRegister(1);
@@ -178,6 +182,7 @@ public class IntroductionTest {
 
     //자기소개서 수정
     @Test
+    @TestDescription("자기소개서 수정 동작 확인")
     public void 자기소개서_수정() throws Exception{
         //유저 생성, 등록
         User user = createUserAndRegister(2);
@@ -234,6 +239,7 @@ public class IntroductionTest {
 
     //자기소개서 삭제
     @Test
+    @TestDescription("자기소개서 삭제 동작 확인")
     public void 자기소개서_삭제() throws Exception {
         User user = createUserAndRegister(3);
 
@@ -287,6 +293,39 @@ public class IntroductionTest {
         return user;
     }
 
+    @Test
+    @TestDescription("잘못된 값이 들어왔을 때 에러 리턴 확인")
+    public void 에러_리턴_확인() throws Exception {
+        User user = createUserAndRegister(1);
+
+        //jwt 발급
+        String jwtToken = BEARER + jwtTokenUtil.generateToken(user);
+
+        //현재 유저 매핑
+        getIntroductions(jwtToken);
+
+        //자기소개서 생성, 등록
+        IntroductionDto introductionDto = IntroductionDto.builder()
+                .introductionTitle("") //잘못된 값
+                .title1("자기소개서 항목1 제목")
+                .content1("자기소개서 항목1 내용")
+                .title2("자기소개서 항목2 제목")
+                .content2("자기소개서 항목2 내용")
+                .title3("자기소개서 항목3 제목")
+                .content3("자기소개서 항목3 내용")
+                .title4("자기소개서 항목4 제목")
+                .content4("자기소개서 항목4 내용")
+                .title5("자기소개서 항목5 제목")
+                .content5("자기소개서 항목5 내용").build();
+
+        mockMvc.perform(post("/api/introductions")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(introductionDto))
+                        .header(HttpHeaders.AUTHORIZATION, jwtToken))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
+    }
 
 
     public void getIntroductions(String jwtToken) throws Exception {

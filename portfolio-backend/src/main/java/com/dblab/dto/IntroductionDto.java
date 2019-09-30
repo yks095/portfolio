@@ -1,14 +1,9 @@
 package com.dblab.dto;
 
-import com.dblab.domain.Introduction;
-import com.dblab.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 
 import javax.validation.constraints.NotBlank;
 

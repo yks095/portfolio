@@ -1,10 +1,10 @@
 package com.dblab.jwt;
 
+import com.dblab.common.TestDescription;
 import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,13 +12,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -55,6 +50,7 @@ public class JwtTest {
     }
 
     @Test
+    @TestDescription("sdsdsd")
     public void JWT토큰_반환_확인() throws Exception {
 
         UserDto userDto = create_user(1);

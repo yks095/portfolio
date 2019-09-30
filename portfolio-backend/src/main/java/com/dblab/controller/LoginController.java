@@ -13,15 +13,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Controller
@@ -67,27 +64,6 @@ public class LoginController {
             }
 
         }
-    }
-
-//    @PostMapping("/logouting")
-//    public ResponseEntity<?> logout(@Valid @RequestBody UserDto userDto, BindingResult bindingResult){
-//        if (bindingResult.hasErrors()){
-//            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//
-//        else{
-//            String jwtToken = response.getHeader("Authorization");
-//            jwtToken = jwtToken.substring(7);
-//            jwtTokenUtil.deleteToken(jwtToken);
-//            return new ResponseEntity<>("{}", HttpStatus.OK);
-//        }
-//    }
-
-    @GetMapping("/logouting")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        String jwtToken = request.getHeader("Authorization");
-        jwtToken = jwtToken.substring(7);
-        return new ResponseEntity<>("{}", HttpStatus.OK);
     }
 
     private void authenticate(String username, String password) throws Exception {

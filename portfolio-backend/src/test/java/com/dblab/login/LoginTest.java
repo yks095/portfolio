@@ -5,7 +5,6 @@ import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
 import com.dblab.repository.UserRepository;
 import com.dblab.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;

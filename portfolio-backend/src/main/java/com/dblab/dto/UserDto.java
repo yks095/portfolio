@@ -46,12 +46,13 @@ public class UserDto {
         this.gitAddr = gitAddr;
     }
 
-    public User setUser() {
+    public User setUser(String uri) {
         User user = new User();
         user.setUsername(this.username);
         user.setPassword(this.password);
         user.setEmail(this.email);
         user.setGitAddr(this.gitAddr);
+        user.setProfile(uri);
         user.setRegisteredDate(LocalDateTime.now());
         return user;
     }

@@ -4,6 +4,7 @@ import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.JwtToken;
 import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
+
 import com.dblab.repository.UserRepository;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,6 @@ public class LoginController {
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping("/login")
     public String loginView() {

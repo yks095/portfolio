@@ -31,13 +31,13 @@ public class ProjectDto {
 
     private User user;
 
-    public Project save(User user)  {
+    public Project save(User user, String uri)  {
         Project project = new Project();
 
         project.setName(this.name);
         project.setPeriod(this.period);
         project.setDescription(this.description);
-        project.setImage(this.image);
+        project.setImage(uri);
         project.setGitAddr(this.gitAddr);
         project.setRegisteredDate(LocalDateTime.now());
         project.setUsers(user);

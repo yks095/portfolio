@@ -21,13 +21,13 @@ public class ProjectService {
     ProjectRepository projectRepository;
 
 
-    public void saveProject(ProjectDto projectDto, User user) {
-        projectRepository.save(projectDto.save(user));
+    public void saveProject(ProjectDto projectDto, User user, String uri) {
+        projectRepository.save(projectDto.save(user, uri));
     }
 
-    public void modifyProject(Long idx, ProjectDto projectDto) {
+    public void modifyProject(Long idx, ProjectDto projectDto, String uri) {
         Project modifiedProject= projectRepository.findByIdx(idx);
-        modifiedProject.modifyProject(projectDto);
+        modifiedProject.modifyProject(projectDto, uri);
 
         projectRepository.save(modifiedProject);
     }

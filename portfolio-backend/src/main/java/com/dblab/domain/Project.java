@@ -53,11 +53,11 @@ public class Project implements Serializable {
         this.user = user;
     }
 
-    public void modifyProject(ProjectDto projectDto) {
+    public void modifyProject(ProjectDto projectDto, String uri) {
         this.name = projectDto.getName();
         this.period = projectDto.getPeriod();
         this.description = projectDto.getDescription();
-        this.image = projectDto.getImage();
+        this.image = uri;
         this.gitAddr = projectDto.getGitAddr();
     }
 

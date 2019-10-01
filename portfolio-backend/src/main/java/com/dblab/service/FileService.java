@@ -78,7 +78,7 @@ public class FileService {
         try {
 
             String requestUrl = request.getRequestURI() + "/";
-
+          
             // 이미지 구분
             if(requestUrl.contains("user"))
                 fileName = USER_IMG + fileName;
@@ -152,3 +152,4 @@ public class FileService {
     }
 
 }
+

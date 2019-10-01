@@ -21,7 +21,7 @@ public class UserDto {
     private String username;
 
     @NotBlank(message = "필수 항목입니다.")
-    @Size(min = 6, max = 16, message = "비밀번호는 4자 이상 12자 이하입니다.")
+    @Size(min = 6, max = 16, message = "비밀번호는 6자 이상 12자 이하입니다.")
     private String password;
 
     @NotBlank(message = "필수 항목입니다.")

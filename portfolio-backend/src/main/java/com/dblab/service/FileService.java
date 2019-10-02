@@ -5,6 +5,7 @@ import com.dblab.config.exception.FileDownloadException;
 import com.dblab.config.exception.FileUploadException;
 import com.dblab.controller.UserController;
 import com.dblab.repository.UserRepository;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +38,13 @@ public class FileService {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    ResourceLoader resourceLoader;
-
-
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private static final String USER_DEFAULT_IMG = "default_user.png";
     private static final String PROJECT_DEFAULT_IMG = "default_project.png";
+
+    private static final String USER_IMG = "PROFILE_";
+    private static final String PROJECT_IMG = "PROJECT_";
 
     @Autowired
     public FileService(FileConfig config) {
@@ -63,20 +63,27 @@ public class FileService {
     public String storeFile(MultipartFile file, HttpServletRequest request) {
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
+        String extension = FilenameUtils.getExtension(fileName);
         String randomUuid = UUID.randomUUID().toString();
         fileName = randomUuid + "_" + fileName;
 
-        // 파일명에 부적합 문자가 있는지 확인한다.
+        // 파일명 검사
         if(fileName.contains(".."))
             throw new FileUploadException("파일명에 부적합 문자가 포함되어 있습니다. " + fileName);
+        if(!"jpg".equals(extension) && !"png".equals(extension) && !"jpeg".equals(extension))
+            throw new FileUploadException("이미지 파일이 아닙니다." + extension);
 
         Path targetLocation = this.fileLocation.resolve(fileName);
 
         try {
 
             String requestUrl = request.getRequestURI() + "/";
-            System.out.println(requestUrl);
+          
+            // 이미지 구분
+            if(requestUrl.contains("user"))
+                fileName = USER_IMG + fileName;
+            else if(requestUrl.contains("projects"))
+                fileName = PROJECT_IMG + fileName;
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -105,7 +112,6 @@ public class FileService {
                     logger.info("Could not determine file type.");
                 }
 
-                // Fallback to the default content type if type could not be determined
                 if(contentType == null) {
                     contentType = "application/octet-stream";
                 }
@@ -142,7 +148,8 @@ public class FileService {
                     .toUriString();
         }
 
-            return fileDownloadUri;
-        }
-
+        return fileDownloadUri;
     }
+
+}
+

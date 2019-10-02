@@ -4,8 +4,6 @@ import com.dblab.config.jwtConfig.JwtTokenUtil;
 import com.dblab.domain.JwtToken;
 import com.dblab.domain.User;
 import com.dblab.dto.UserDto;
-
-import com.dblab.repository.UserRepository;
 import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -57,7 +57,6 @@ public class ProjectRestController {
     }
 
     @PostMapping
-
     public ResponseEntity<?> saveProject(@Valid ProjectDto projectDto,
                                          BindingResult bindingResult,
                                          @RequestParam(value = "file", required = false) MultipartFile file,
@@ -80,11 +79,22 @@ public class ProjectRestController {
     }
 
     @PutMapping("/{idx}")
-    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx, @Valid @RequestBody ProjectDto projectDto, Errors errors){
-        if(errors.hasErrors())
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx,
+                                           @Valid ProjectDto projectDto,
+                                           @RequestParam(value = "file", required = false) MultipartFile file,
+                                           BindingResult bindingResult,
+                                           HttpServletRequest request){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
         else {
-            projectService.modifyProject(idx, projectDto);
+            if(file == null)    {
+                String uri = fileService.setDefaultImage(request);
+                projectService.modifyProject(idx, projectDto, uri);
+            }
+            else    {
+                String uri = fileService.storeFile(file, request);
+                projectService.modifyProject(idx, projectDto, uri);
+            }
             return new ResponseEntity<>("{}", HttpStatus.OK);
         }
     }

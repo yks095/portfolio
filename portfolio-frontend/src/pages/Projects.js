@@ -1,52 +1,92 @@
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import { withStyles } from '@material-ui/styles';
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Project from '../components/projects/Project';
 import DialogFull from '../components/DialogFull';
+import ProjectDialog from '../components/projects/ProjectDialog';
+import * as service from '../service/projects';
+import './Projects.css';
 
-const project = [{
-    'idx': 1,
-    'projectName': 'Smart Pot',
-    'description': '스마트 화분',
-    'persons': '박동현',
-    'period': '3개월',
-    'registerDate': '2019-08-24'
-},
-{
-    'idx': 2,
-    'projectName': 'Portfolio',
-    'description': '포트폴리오',
-    'persons': '박동현',
-    'period': '4개월',
-    'registerDate': '2019-08-24'
-}]
+const styles = (theme) => ({
+    root: {
+        marginTop: 100,
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        overflow: 'hidden',
+    },
+    button: {
+        fontSize: '200%',
+        fontWeight: 'bold',
+    },
+    gridList: {
+        width: 1000,
+        float: 'center',
+        height: 550,
+        display: 'flex',
+    },
+    gridText: {
+        textAlign: 'center',
+        float: 'center',
+        verticalAlign: 'middle'
+    },
+});
 
 class Projects extends React.Component {
+    constructor(props) {
+        super();
+        this.state = {
+            projects: "",
+        }
+    }
+
+    componentDidMount() {
+        this.fetchIntroductionInfo();
+    }
+
+    fetchIntroductionInfo = async () => {
+        const projects = await service.getProjects();
+        console.log(projects.data)
+        this.setState({
+            'projects': projects.data._embedded.projectList
+        });
+    }
     render() {
-        const cellList = ["No", "Project Name", "Description", "Persons", "Period", "RegisterDate"]
+        const { classes } = this.props;
         return (
-            <div>
-                <DialogFull />
-                <div >
-                    <Table >
-                        <TableHead>
-                            <TableRow>
-                                {cellList.map(c => {
-                                    return <TableCell >{c}</TableCell>
-                                })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {project.map(c => { return <Project no={c.idx} key={c.idx} projectName={c.projectName} description={c.description} persons={c.persons} period={c.period} registerDate={c.registerDate} /> })}
-                        </TableBody>
-                    </Table>
+            <div >
+                <div className="Projects-Background">
+                    <DialogFull />
+                    <div className="Title_Text_I">Projects</div>
+                    <div className={classes.root}>
+                        <GridList cellHeight={250} className={classes.gridList} cols={3}>
+                            {
+                                this.state.projects ?
+                                    this.state.projects.map(c => {
+                                        return (
+                                            <GridListTile key={c.idx} cols={c.cols || 1}>
+                                                <ProjectDialog
+                                                    key={c.idx}
+                                                    onClick={this.handleClickOpen}
+                                                    idx={c.idx}
+                                                    name={c.name}
+                                                    description={c.description}
+                                                    image={c.image}
+                                                    period={c.period}
+                                                    git_addr={c.git_addr}
+                                                    registeredDate={c.registeredDate} >
+                                                    {c.title}
+                                                </ProjectDialog>
+                                            </GridListTile>
+                                        )
+                                    }) : ""
+                            }
+                        </GridList>
+                    </div>
                 </div>
             </div>
         );
     }
 }
 
-export default Projects;
+export default withStyles(styles)(Projects);

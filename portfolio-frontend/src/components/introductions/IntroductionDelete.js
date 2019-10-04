@@ -28,8 +28,9 @@ class IntroductionDelete extends React.Component {
                 console.log(res);
             })
         this.setState({
-            open: false
+            open: false,
         })
+        this.props.handleClickClose()
     }
 
     handleClickOpen = () => {
@@ -48,7 +49,7 @@ class IntroductionDelete extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                <Button variant="contained" color="primary" className={classes.button} onClick={this.handleClickOpen}>
+                <Button  color="primary" className={classes.button} onClick={this.handleClickOpen}>
                     delete
             </Button>
                 <Dialog
@@ -60,14 +61,14 @@ class IntroductionDelete extends React.Component {
                     <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
-                            {this.props.title} 을 삭제하시겠습니까?
+                            {this.props.introductionTitle} 을 삭제하시겠습니까?
                 </DialogContentText>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.handleClose} color="primary">
                             아니오
                         </Button>
-                        <Button onClick={this.deleteIntroduction} color="primary" autoFocus>
+                        <Button onClick={this.deleteIntroduction}  color="primary" autoFocus>
                             예
                         </Button>
                     </DialogActions>

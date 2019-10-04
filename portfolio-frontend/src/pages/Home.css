@@ -8,11 +8,23 @@
     border: 3px solid;
     margin: auto;
 }
-.Title_Text {
-    color: yellow;
-    font-family: sans-serif
 
+.AppRoot {
+    font-family: 'Mansalva', cursive;
 }
+
+.Title_Text_M {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    color: yellow;
+    font-weight: bold;
+    font-size: 500%;
+    text-align: center;
+  }
+
 .App-Background {
     background-image:url(../images/backImg.jpg);
     overflow:hidden;

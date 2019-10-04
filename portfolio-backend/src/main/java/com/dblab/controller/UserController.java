@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -25,13 +25,13 @@ public class UserController {
     FileService fileService;
 
     @PostMapping
-    public ResponseEntity<?> saveUser(@Valid UserDto userDTO,
-                                      BindingResult bindingResult,
+    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDTO,
+                                      Errors errors,
                                       @RequestParam(value = "file", required = false) MultipartFile file,
                                       HttpServletRequest request){
 
-        if(bindingResult.hasErrors())
-            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        if(errors.hasErrors())
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         else {
             if(userService.userRedunduncyCheck(userDTO)){
                 return new ResponseEntity<>("중복된 ID", HttpStatus.BAD_REQUEST);

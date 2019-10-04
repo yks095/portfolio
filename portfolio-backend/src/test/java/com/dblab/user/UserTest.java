@@ -49,6 +49,8 @@ public class UserTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
     }
 
+    private final String saveUserURL = "/api/users";
+
     @Test
     public void saveUserProfileTest() throws Exception {
 
@@ -99,7 +101,7 @@ public class UserTest {
         userDTO.setGitAddr("https://github.com/testId");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
@@ -114,7 +116,7 @@ public class UserTest {
         userDTO.setUsername("id");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
@@ -126,7 +128,7 @@ public class UserTest {
         userDTO.setUsername("testUserName12");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
@@ -139,7 +141,7 @@ public class UserTest {
         userDTO.setPassword("passw");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
@@ -151,7 +153,7 @@ public class UserTest {
         userDTO.setPassword("testUserPassword12");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
@@ -164,7 +166,7 @@ public class UserTest {
         userDTO.setEmail("test");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터 베이스 확인
@@ -176,7 +178,7 @@ public class UserTest {
         userDTO.setGitAddr("address");
 
         //유저 등록
-        mockMvc.perform(post("/user").content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(post(saveUserURL).content(mapper.writeValueAsString(userDTO)).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
         //데이터 베이스 확인

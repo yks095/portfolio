@@ -107,7 +107,7 @@ public class ProjectRestTest {
             projectDto.setDescription("description" + i);
             projectDto.setImage("image" + i);
             projectDto.setGitAddr("www.github.com/test" + i);
-            projectService.saveProject(projectDto, user);
+//            projectService.saveProject(projectDto, user);
         }
 
         assertThat(user.getProjects().size()).isEqualTo(10);

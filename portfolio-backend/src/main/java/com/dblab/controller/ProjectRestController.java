@@ -57,7 +57,7 @@ public class ProjectRestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveProject(@Valid ProjectDto projectDto,
+    public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto,
                                          BindingResult bindingResult,
                                          @RequestParam(value = "file", required = false) MultipartFile file,
                                          HttpServletRequest request) {
@@ -80,7 +80,7 @@ public class ProjectRestController {
 
     @PutMapping("/{idx}")
     public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx,
-                                           @Valid ProjectDto projectDto,
+                                           @Valid @RequestBody ProjectDto projectDto,
                                            @RequestParam(value = "file", required = false) MultipartFile file,
                                            BindingResult bindingResult,
                                            HttpServletRequest request){

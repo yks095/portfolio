@@ -1,12 +1,12 @@
-import React from 'react';
-import { withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import axios from 'axios';
+import { withStyles } from '@material-ui/styles';
+import React from 'react';
+import * as service from '../../service/introduction';
 
 const styles = theme => ({
     button: {
@@ -21,15 +21,9 @@ class IntroductionDelete extends React.Component {
         open: false,
     }
 
-    deleteIntroduction = () => {
+    deleteIntroduction = async () => {
         const no = this.props.idx;
-        axios.delete('http://localhost:8080/api/introductions/' + no)
-            .then(res => {
-                console.log(res);
-            })
-        this.setState({
-            open: false,
-        })
+        await service.deleteIntroduction(no);
         this.props.handleClickClose()
     }
 

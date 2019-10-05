@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/styles';
 import React from 'react';
 import DialogFull from '../components/DialogFull';
 import ProjectDialog from '../components/projects/ProjectDialog';
+import ProjectAdd from '../components/projects/ProjectAdd';
 import * as service from '../service/projects';
 import './Projects.css';
 
@@ -58,6 +59,7 @@ class Projects extends React.Component {
                 <div className="Projects-Background">
                     <DialogFull />
                     <div className="Title_Text_I">Projects</div>
+                    <ProjectAdd />
                     <div className={classes.root}>
                         <GridList cellHeight={250} className={classes.gridList} cols={3}>
                             {

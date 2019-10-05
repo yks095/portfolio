@@ -7,6 +7,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import ProjectDelete from './ProjectDelete';
+import ProjectEdit from './ProjectEdit';
 
 const styles = theme => ({
     panel: {
@@ -118,12 +120,17 @@ class ProjectDialog extends React.Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={this.handleClickClose} color="primary">
-                            Edit
-                        </Button>
-                        <Button onClick={this.handleClickClose} color="primary">
-                            Delete
-                        </Button>
+                        <ProjectEdit
+                            idx = {this.props.idx}
+                            name = {this.props.name}
+                            description = {this.props.description}
+                            period = {this.props.description}
+                        />
+                        <ProjectDelete 
+                            idx = {this.props.idx}
+                            name = {this.props.name}
+                            handleClickClose = {this.handleClickClose}
+                        />
                         <Button onClick={this.handleClickClose} color="primary" autoFocus>
                             Close
                         </Button>

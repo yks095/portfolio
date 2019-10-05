@@ -8,8 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
 import React from 'react';
+import * as service from '../../service/introduction';
 
 const styles = theme => ({
     button: {
@@ -60,11 +60,8 @@ class IntroductionAdd extends React.Component {
 
     }
 
-    editIntroduction = () => {
-        axios.post('http://localhost:8080/api/introductions', this.state)
-            .then(res => {
-                console.log(res);
-            })
+    addIntroduction = async () => {
+        await service.addIntroduction(this.state);
     }
 
     handleClickOpen = () => {
@@ -85,7 +82,7 @@ class IntroductionAdd extends React.Component {
     }
 
     handleClose = (event) => {
-        this.editIntroduction();
+        this.addIntroduction();
         this.setState({
             open: false
         })

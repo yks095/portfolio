@@ -34,9 +34,9 @@ class Home extends React.Component {
     render() {
         const { classes } = this.props;
         return (
-            <div>
+            <div className="AppRoot">
                 <div className="App-Background"><DialogFull /></div>
-                <div className="Title_Text">Hello</div>
+                <div className="Title_Text_M">Hello</div>
                 <div className="Text">
                     My Pages
                 </div>
@@ -54,7 +54,6 @@ class Home extends React.Component {
                         <Button className={classes.button}>
                             자격증
                         </Button>
-                        )}
                     </GridList>
                 </div>
             </div>

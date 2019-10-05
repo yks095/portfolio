@@ -1,16 +1,15 @@
-import React from 'react';
 import { withStyles } from '@material-ui/core';
+import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
+import Slide from '@material-ui/core/Slide';
+import TextField from '@material-ui/core/TextField';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import axios from 'axios';
+import React from 'react';
+import * as service from '../../service/introduction';
 
 const styles = theme => ({
     button: {
@@ -36,11 +35,17 @@ class IntroductionEdit extends React.Component {
         this.state = {
             open: false,
             idx: '',
-            title: '',
-            reason: '',
-            strength: '',
-            weakness: '',
-            aspiration: '',
+            introductionTitle: "",
+            title1: "",
+            content1: "",
+            title2: "",
+            content2: "",
+            title3: "",
+            content3: "",
+            title4: "",
+            content4: "",
+            title5: "",
+            content5: "",
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -51,28 +56,31 @@ class IntroductionEdit extends React.Component {
 
     }
 
-    editIntroduction = () => {
+    editIntroduction = async () => {
         const no = this.state.idx;
-        axios.put('http://localhost:8080/api/introductions/' + no, this.state)
-            .then(res => {
-                console.log(res);
-            })
+        await service.editIntroduction(no, this.state);
     }
 
     handleClickOpen = () => {
         this.setState({
             open: true,
             idx: this.props.idx,
-            title: this.props.title,
-            growth: this.props.growth,
-            reason: this.props.reason,
-            strength: this.props.strength,
-            weakness: this.props.weakness,
-            aspiration: this.props.aspiration
+            introductionTitle: this.props.introductionTitle,
+            title1: this.props.title1,
+            content1: this.props.content1,
+            title2: this.props.title2,
+            content2: this.props.content2,
+            title3: this.props.title3,
+            content3: this.props.content3,
+            title4: this.props.title4,
+            content4: this.props.content4,
+            title5: this.props.title5,
+            content5: this.props.content5,
         })
     }
 
     handleClose = (event) => {
+        console.log(this.state)
         this.editIntroduction();
         this.setState({
             open: false
@@ -83,7 +91,7 @@ class IntroductionEdit extends React.Component {
         const target = event.target
         const name = target.name
         const value = target.value
-                
+
         this.setState({
             [name]: value
         });
@@ -93,69 +101,54 @@ class IntroductionEdit extends React.Component {
         const { classes } = this.props;
         return (
             <div>
-                <Button variant="contained" color="primary" className={classes.button} onClick={this.handleClickOpen}>
+                <Button color="primary" className={classes.button} onClick={this.handleClickOpen}>
                     edit
                 </Button>
-                <Dialog fullScreen open={this.state.open} onClose={this.handleClose} TransitionComponent={Transition}>
+                <Dialog
+                    fullWidth
+                    maxWidth="lg"
+                    open={this.state.open}
+                    onClose={this.handleClose}
+                    TransitionComponent={Transition}
+                >
                     <AppBar className={classes.appBar}>
                         <Toolbar>
                             <IconButton edge="start" color="inherit" onClick={this.handleClose} aria-label="close">
                                 <CloseIcon />
                             </IconButton>
                             <Typography variant="h6" className={classes.title}>
-                                {this.props.title}
+                                <TextField label="Company" value={this.state.introductionTitle} autoFocus margin="dense" name="introductionTitle" onChange={this.handleChange} />
                             </Typography>
                             <Button color="inherit" onClick={this.handleClose}>
                                 save
                             </Button>
                         </Toolbar>
                     </AppBar>
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <Typography variant="h6" component="h2">
-                                성장과정
-                            </Typography>
-                            <br />
-                            <textarea name="growth" value={this.state.growth} onChange={this.handleChange} />
-
-                        </CardContent>
-                    </Card>
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <Typography variant="h6" component="h2">
-                                지원 동기
-                            </Typography>
-                            <br />
-                            <textarea name="reason" value={this.state.reason} onChange={this.handleChange} />
-                        </CardContent>
-                    </Card>
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <Typography variant="h6" component="h2">
-                                장점
-                            </Typography>
-                            <br />
-                            <textarea name="strength" value={this.state.strength} onChange={this.handleChange} />
-                        </CardContent>
-                    </Card>
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <Typography variant="h6" component="h2">
-                                단점
-                            </Typography>
-                            <br />
-                            <textarea name="weakness" value={this.state.weakness} onChange={this.handleChange} />
-                        </CardContent>
-                    </Card>
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <Typography variant="h6" component="h2">
-                                입사 후 포부
-                            </Typography>
-                            <br />
-                            <textarea name="aspiration" value={this.state.aspiration} onChange={this.handleChange} />
-                        </CardContent>
-                    </Card>
+                    <div className={classes.textField}>
+                        <TextField label="Title" autoFocus margin="auto" name="title1" value={this.state.title1} onChange={this.handleChange} />
+                        <br />
+                        <TextField label="Content" fullWidth autoFocus margin="auto" name="content1" value={this.state.content1} onChange={this.handleChange} />
+                    </div>
+                    <div className={classes.textField}>
+                        <TextField label="Title" autoFocus margin="dense" name="title2" value={this.state.title2} onChange={this.handleChange} />
+                        <br />
+                        <TextField label="Content" fullWidth autoFocus margin="dense" name="content2" value={this.state.content2} onChange={this.handleChange} />
+                    </div>
+                    <div className={classes.textField}>
+                        <TextField label="Title" autoFocus margin="dense" name="title3" value={this.state.title3} onChange={this.handleChange} />
+                        <br />
+                        <TextField label="Content" fullWidth autoFocus margin="dense" name="content3" value={this.state.content3} onChange={this.handleChange} />
+                    </div>
+                    <div className={classes.textField}>
+                        <TextField label="Title" autoFocus margin="dense" name="title4" value={this.state.title4} onChange={this.handleChange} />
+                        <br />
+                        <TextField label="Content" fullWidth autoFocus margin="dense" name="content4" value={this.state.content4} onChange={this.handleChange} />
+                    </div>
+                    <div className={classes.textField}>
+                        <TextField label="Title" autoFocus margin="dense" name="title5" value={this.state.title5} onChange={this.handleChange} />
+                        <br />
+                        <TextField label="Content" fullWidth autoFocus margin="dense" name="content5" value={this.state.content5} onChange={this.handleChange} />
+                    </div>
                 </Dialog>
             </div>
         );

@@ -1,5 +1,6 @@
 package com.dblab.service;
 
+import com.dblab.adapter.UserAdapter;
 import com.dblab.domain.User;
 import com.dblab.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        if(user == null) throw new UsernameNotFoundException("유저를 찾을 수 없습니다.");
+        if(user == null) {
+            throw new UsernameNotFoundException("유저를 찾을 수 없습니다.");
+        }
         else {
-            grantedAuthorities.add(new SimpleGrantedAuthority("user"));
-            return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantedAuthorities);
+            return new UserAdapter(user);
         }
     }
 }

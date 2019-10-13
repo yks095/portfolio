@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,7 +51,7 @@ public class JwtTest {
     }
 
     @Test
-    @TestDescription("sdsdsd")
+    @TestDescription("JWT토큰 정상 반환")
     public void JWT토큰_반환_확인() throws Exception {
 
         UserDto userDto = create_user(1);
@@ -94,7 +95,7 @@ public class JwtTest {
         assertThat(jwtTokenUtil.usernameFromToken(jwtToken)).isEqualTo("testId1");
 
         //권한이 필요한 페이지 요청
-        mockMvc.perform(get("/api/introductions").header("Authorization", "Bearer "+jwtToken))
+        mockMvc.perform(get("/api/introductions").header(HttpHeaders.AUTHORIZATION, "Bearer "+jwtToken))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -127,6 +128,5 @@ public class JwtTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .with(csrf()))
                 .andExpect(status().isCreated());
-
     }
 }

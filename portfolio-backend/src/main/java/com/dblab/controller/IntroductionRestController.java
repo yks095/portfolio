@@ -7,6 +7,7 @@ import com.dblab.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/api/introductions")
+@RequestMapping(value = "/api/introductions", produces = MediaTypes.HAL_JSON_VALUE)
 public class IntroductionRestController {
 
     @Autowired
@@ -28,7 +29,7 @@ public class IntroductionRestController {
 
     private User currentUser;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<?> getIntroductions(@PageableDefault(size = 6) Pageable pageable){
         //현재 유저와 매핑
         org.springframework.security.core.userdetails.User user
@@ -40,7 +41,7 @@ public class IntroductionRestController {
         return ResponseEntity.ok(introductionService.pagedIntroduction(currentUser, pageable));
     }
 
-    @GetMapping(value = "/{idx}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{idx}")
     public ResponseEntity<?> getIntroductionDetail(@PathVariable("idx") Long idx){
         return ResponseEntity.ok(introductionService.findIntroductionDetail(idx));
     }

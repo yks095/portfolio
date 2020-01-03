@@ -73,17 +73,18 @@ public class FileService {
         if(!"jpg".equals(extension) && !"png".equals(extension) && !"jpeg".equals(extension))
             throw new FileUploadException("이미지 파일이 아닙니다." + extension);
 
+        String requestUrl = request.getRequestURI() + "/";
+
+        // 이미지 구분
+        if(requestUrl.contains("user"))
+            fileName = USER_IMG + fileName;
+        else if(requestUrl.contains("projects"))
+            fileName = PROJECT_IMG + fileName;
+
+
         Path targetLocation = this.fileLocation.resolve(fileName);
 
         try {
-
-            String requestUrl = request.getRequestURI() + "/";
-          
-            // 이미지 구분
-            if(requestUrl.contains("user"))
-                fileName = USER_IMG + fileName;
-            else if(requestUrl.contains("projects"))
-                fileName = PROJECT_IMG + fileName;
 
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()

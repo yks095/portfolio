@@ -24,8 +24,16 @@ public class UserController {
     @Autowired
     FileService fileService;
 
+    @GetMapping({"/{fileName:.+}", "/{idx}/{fileName:.+}"})
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName,
+                                            @PathVariable(required = false) Long idx,
+                                            HttpServletRequest request){
+
+        return  fileService.loadFileAsResource(fileName, request);
+    }
+
     @PostMapping
-    public ResponseEntity<?> saveUser(@Valid @RequestBody UserDto userDTO,
+    public ResponseEntity<?> saveUser(@Valid UserDto userDTO,
                                       Errors errors,
                                       @RequestParam(value = "file", required = false) MultipartFile file,
                                       HttpServletRequest request){
@@ -50,9 +58,25 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{fileName:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName, HttpServletRequest request){
-
-        return  fileService.loadFileAsResource(fileName, request);
+    @PutMapping("/{idx}")
+    public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx,
+                                           @Valid UserDto userDto,
+                                           @RequestParam(value = "file", required = false) MultipartFile file,
+                                           Errors errors,
+                                           HttpServletRequest request){
+        if(errors.hasErrors())
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        else {
+            if(file == null)    {
+                String uri = fileService.setDefaultImage(request);
+                userService.modifyUser(idx, userDto, uri);
+            }
+            else    {
+                String uri = fileService.storeFile(file, request);
+                userService.modifyUser(idx, userDto, uri);
+            }
+            return new ResponseEntity<>("{}", HttpStatus.OK);
+        }
     }
+
 }

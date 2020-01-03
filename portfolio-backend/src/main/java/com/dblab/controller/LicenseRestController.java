@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +47,7 @@ public class LicenseRestController {
     @PostMapping
     public ResponseEntity<?> saveLicense(@Valid @RequestBody LicenseDto licenseDto, Errors errors) {
         if (errors.hasErrors())
-            return new ResponseEntity<>(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         else {
             licenseService.saveLicense(licenseDto, currentUser);
             return new ResponseEntity<>("{}", HttpStatus.CREATED);
@@ -58,7 +57,7 @@ public class LicenseRestController {
     @PutMapping("/{idx}")
     public ResponseEntity<?> modifyLicense(@PathVariable("idx") Long idx, @Valid @RequestBody LicenseDto licenseDto, Errors errors){
         if(errors.hasErrors())
-            return new ResponseEntity<>(errors.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         else    {
             licenseService.modifyLicense(idx, licenseDto);
             return new ResponseEntity<>("{}", HttpStatus.OK);

@@ -75,4 +75,12 @@ public class User {
     public void uploadImage(UserDto userDto) {
         this.profile = userDto.getProfile();
     }
+
+    public void modifyUser(UserDto userDto, String uri) {
+        this.username = userDto.getUsername();
+        this.password = userDto.getPassword();
+        this.email = userDto.getEmail();
+        this.profile = uri;
+        this.gitAddr = userDto.getGitAddr();
+    }
 }

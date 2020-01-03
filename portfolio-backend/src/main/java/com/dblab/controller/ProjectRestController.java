@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +40,7 @@ public class ProjectRestController {
     private User currentUser;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> projectView(@PageableDefault Pageable pageable){
+    public ResponseEntity<?> projectView(@PageableDefault(size = 6) Pageable pageable){
 
         org.springframework.security.core.userdetails.User user =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -50,19 +49,22 @@ public class ProjectRestController {
         return ResponseEntity.ok(projectService.getProjects(pageable, currentUser));
     }
 
-    @GetMapping("/{fileName:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName, HttpServletRequest request){
+
+    @GetMapping({"/{fileName:.+}", "/{idx}/{fileName:.+}"})
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName,
+                                            @PathVariable(required = false) Long idx,
+                                            HttpServletRequest request){
 
         return  fileService.loadFileAsResource(fileName, request);
     }
 
     @PostMapping
-    public ResponseEntity<?> saveProject(@Valid @RequestBody ProjectDto projectDto,
-                                         BindingResult bindingResult,
+    public ResponseEntity<?> saveProject(@Valid ProjectDto projectDto,
+                                         Errors errors,
                                          @RequestParam(value = "file", required = false) MultipartFile file,
                                          HttpServletRequest request) {
-        if (bindingResult.hasErrors())
-            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        if (errors.hasErrors())
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 
         else {
 
@@ -82,10 +84,10 @@ public class ProjectRestController {
     public ResponseEntity<?> modifyProject(@PathVariable("idx") Long idx,
                                            @Valid @RequestBody ProjectDto projectDto,
                                            @RequestParam(value = "file", required = false) MultipartFile file,
-                                           BindingResult bindingResult,
+                                           Errors errors,
                                            HttpServletRequest request){
-        if(bindingResult.hasErrors())
-            return new ResponseEntity<>(bindingResult.getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        if(errors.hasErrors())
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         else {
             if(file == null)    {
                 String uri = fileService.setDefaultImage(request);

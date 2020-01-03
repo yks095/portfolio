@@ -45,4 +45,11 @@ public class UserService {
     public User findUserByUsername(UserDto userDto) {
         return userRepository.findByUsername(userDto.getUsername());
     }
+
+    public void modifyUser(Long idx, UserDto userDto, String uri) {
+        User modifiedUser = userRepository.findByIdx(idx);
+        modifiedUser.modifyUser(userDto, uri);
+
+        userRepository.save(modifiedUser);
+    }
 }
